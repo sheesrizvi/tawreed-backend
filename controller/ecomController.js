@@ -277,7 +277,6 @@ const getAllProduct = asyncHandler(async (req, res) => {
     ecomBrand,
     seller,
     discount,
-
     rating: ratings,
   };
   const asArray = Object.entries(filter);
@@ -288,10 +287,11 @@ const getAllProduct = asyncHandler(async (req, res) => {
   const count = await EcomProduct.countDocuments({
     $and: [
       justStrings,
-      { sell_price: { $gte: minprice } },
-      { sell_price: { $lte: maxprice } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   });
+  console.log(count)
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
@@ -299,15 +299,15 @@ const getAllProduct = asyncHandler(async (req, res) => {
   const products = await EcomProduct.find({
     $and: [
       justStrings,
-      { sell_price: { $gte: minprice } },
-      { sell_price: { $lte: maxprice } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   })
     .limit(pageSize)
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .populate("ecomBrand ecomCategory seller");
-
+console.log(products)
   res.json({ products, pageCount });
 });
 const getActiveProduct = asyncHandler(async (req, res) => {
