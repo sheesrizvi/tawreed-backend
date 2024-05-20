@@ -291,7 +291,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
       { price: { $lte: maxprice } },
     ],
   });
-  console.log(count)
+
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
@@ -307,7 +307,6 @@ const getAllProduct = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .populate("ecomBrand ecomCategory seller");
-console.log(products)
   res.json({ products, pageCount });
 });
 const getActiveProduct = asyncHandler(async (req, res) => {
