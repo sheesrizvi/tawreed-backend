@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 
-
 const User = require("../models/userModel");
 const pdf = require("html-pdf");
 
@@ -72,16 +71,15 @@ const addOrderItems = asyncHandler(async (req, res) => {
       paymentMethod,
       itemsPrice,
       deliveryStatus,
-      taxPrice,
       isPaid: false,
       shippingPrice,
       totalPrice,
       notes,
-      deliverySlot,
     });
     if (order) {
       for (let i = 0; i < orderItems.length; i++) {
         const product = await EcomProduct.findById(orderItems[i].ecomproduct);
+
         if (product) {
           product.countInStock = product.countInStock - orderItems[i].qty;
           await product.save();
@@ -94,7 +92,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       // reward.amount = a;
       // await reward.save();
 
-    //   sendEmail(orderItems, paymentMethod, totalPrice, user);
+      //   sendEmail(orderItems, paymentMethod, totalPrice, user);
       res.status(201).json(order);
     }
   } else {
@@ -114,12 +112,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
       // count in stock algo
 
       for (let i = 0; i < orderItems.length; i++) {
-        
-          const product = await EcomProduct.findById(orderItems[i].ecomproduct);
-          if (product) {
-            product.countInStock = product.countInStock - orderItems[i].qty;
-            await product.save();
-          
+        const product = await EcomProduct.findById(orderItems[i].ecomproduct);
+        if (product) {
+          product.countInStock = product.countInStock - orderItems[i].qty;
+          await product.save();
         }
       }
       // reward algo
@@ -247,7 +243,9 @@ const updateOrderDeliveryStatus = asyncHandler(async (req, res) => {
   if (deliveryStatus == "Cancelled") {
     order.isPaid = false;
     for (let i = 0; i < order.orderItems.length; i++) {
-      const product = await EcomProduct.findById(order.orderItems[i].ecomproduct);
+      const product = await EcomProduct.findById(
+        order.orderItems[i].ecomproduct
+      );
       if (product) {
         product.countInStock = product.countInStock + order.orderItems[i].qty;
         await product.save();

@@ -64,7 +64,9 @@ const updateProperty = asyncHandler(async (req, res) => {
   const {
     name,
     description,
-    nameAr, descriptionAr, detailsAr,
+    nameAr,
+    descriptionAr,
+    detailsAr,
     image,
     location,
     details,
@@ -124,27 +126,31 @@ const getAllProperties = asyncHandler(async (req, res) => {
     propertyType,
     minprice,
     maxprice,
-    rating: ratings,
+    // rating: ratings,
   };
   const asArray = Object.entries(filter);
   const filtered = asArray.filter(([key, value]) => value);
   const justStrings = Object.fromEntries(filtered);
   const page = Number(req.query.pageNumber) || 1;
   const pageSize = 30;
-  const count = await Properties.countDocuments({ $and: [
-    justStrings,
-    { sell_price: { $gte: minprice } },
-    { sell_price: { $lte: maxprice } },
-  ],});
+  const count = await Properties.countDocuments({
+    $and: [
+      justStrings,
+      { sell_price: { $gte: minprice } },
+      { sell_price: { $lte: maxprice } },
+    ],
+  });
   var pageCount = Math.floor(count / 20);
   if (count % 20 !== 0) {
     pageCount = pageCount + 1;
   }
-  const products = await Properties.find({ $and: [
-    justStrings,
-    { sell_price: { $gte: minprice } },
-    { sell_price: { $lte: maxprice } },
-  ],})
+  const products = await Properties.find({
+    $and: [
+      justStrings,
+      { sell_price: { $gte: minprice } },
+      { sell_price: { $lte: maxprice } },
+    ],
+  })
     .limit(pageSize)
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
@@ -214,7 +220,14 @@ const searchProperty = asyncHandler(async (req, res) => {
         index: "default",
         text: {
           query: req.query.Query,
-          path: ["name", "details", "description", "nameAr", "detailsAr", "descriptionAr"],
+          path: [
+            "name",
+            "details",
+            "description",
+            "nameAr",
+            "detailsAr",
+            "descriptionAr",
+          ],
         },
       },
     },

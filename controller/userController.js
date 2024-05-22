@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const {generateTokenUser} = require("../utils/generateToken.js");
+const { generateTokenUser } = require("../utils/generateToken.js");
 const User = require("../models/userModel.js");
 const nodemailer = require("nodemailer");
 const emailTemplate = require("../document/email");
@@ -98,7 +98,6 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     phone,
-    
   });
 
   if (user) {
@@ -148,22 +147,24 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
+    user.phone = req.body.phoneNo || user.phone;
     if (req.body.password) {
       user.password = req.body.password;
     }
 
     const updatedUser = await user.save();
-    // console.log(updatedUser);
+
     res.status(201).json({
       _id: updatedUser._id,
       name: updatedUser.name,
-      email: updatedUser.email,
-
+      phone: updatedUser.phone,
+      isAdmin: updatedUser.isAdmin,
       token: generateTokenUser(
         updatedUser._id,
         updatedUser.name,
-        updatedUser.email
+        updatedUser.email,
+        updatedUser.shippingAddress,
+        updatedUser.phone
       ),
     });
   } else {
@@ -233,30 +234,31 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const saveShippingAddress = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.body.userId);
-    if (user) {
-      user.shippingAddress.email =
-        req.body.shippingAddress.email || user.shippingAddress.email;
-      user.shippingAddress.address =
-        req.body.shippingAddress.address || user.shippingAddress.address;
-      const updatedUser = await user.save();
-      res.json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        shippingAddress: updateUser.shippingAddress,
-        token: generateTokenUser(
-          updatedUser._id,
-          updatedUser.name,
-          updatedUser.email,
-          updatedUser.shippingAddress
-        ),
-      });
-    } else {
-      res.status(404);
-      throw new Error("User not found");
-    }
-  });
+  const user = await User.findById(req.body.userId);
+  if (user) {
+    user.shippingAddress.email =
+      req.body.shippingAddress.email || user.shippingAddress.email;
+    user.shippingAddress.address =
+      req.body.shippingAddress.address || user.shippingAddress.address;
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      shippingAddress: updateUser.shippingAddress,
+      token: generateTokenUser(
+        updatedUser._id,
+        updatedUser.name,
+        updatedUser.email,
+        updatedUser.shippingAddress,
+        updatedUser.phone
+      ),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 module.exports = {
   authUser,
@@ -268,4 +270,5 @@ module.exports = {
   getUserById,
   updateUser,
   resetPassword,
+  saveShippingAddress,
 };

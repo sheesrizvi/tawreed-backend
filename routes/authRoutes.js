@@ -11,14 +11,21 @@ const {
   authCompany,
   approveSeller,
   unapprovedSeller,
-  } = require("../controller/sellerController");
+} = require("../controller/sellerController");
 const { admin } = require("../middleware/authmiddleware");
+const {
+  registerUser,
+  authUser,
+  saveShippingAddress,
+} = require("../controller/userController");
 const router = express.Router();
-
 
 //admin
 router.route("/admin-register").post(registerAdmin);
+router.route("/user-register").post(registerUser);
 router.route("/admin-login").post(authAdmin);
+router.route("/user-login").post(authUser);
+router.route("/saveshippingaddress").post(saveShippingAddress);
 //seller
 router.route("/ecom-register").post(registerEcomVendor);
 router.route("/ecom-login").post(authEcomVendor);
@@ -29,6 +36,6 @@ router.route("/property-login").post(authPropertyManager);
 router.route("/maintenance-register").post(registerMaintenanceManager);
 router.route("/maintenance-login").post(authMaintenanceManager);
 router.route("/approve-seller").post(admin, approveSeller);
-router.route("/unapproved-seller").get( admin, unapprovedSeller);
+router.route("/unapproved-seller").get(admin, unapprovedSeller);
 
 module.exports = router;

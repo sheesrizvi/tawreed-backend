@@ -5,10 +5,14 @@ const generateTokenAdmin = (id, name, email, type) => {
     expiresIn: "1d",
   });
 };
-const generateTokenUser = (id, name, email,) => {
-  return jwt.sign({ id, name, email }, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
+const generateTokenUser = (id, name, email, shippingAddress, phone) => {
+  return jwt.sign(
+    { id, name, email, shippingAddress, phone },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1d",
+    }
+  );
 };
 const generateTokenCompany = (
   id,
@@ -25,15 +29,15 @@ const generateTokenCompany = (
   return jwt.sign(
     {
       id,
-  name,
-  email,
+      name,
+      email,
 
-  phone,
-  type,
+      phone,
+      type,
 
-  registrationNumber,
+      registrationNumber,
 
-  pushToken
+      pushToken,
     },
     process.env.JWT_SECRET,
     {
@@ -87,15 +91,15 @@ const generateTokenMaintenance = (
   return jwt.sign(
     {
       id,
-  name,
-  email,
+      name,
+      email,
 
-  phone,
-  type,
+      phone,
+      type,
 
-  registrationNumber,
+      registrationNumber,
 
-  pushToken
+      pushToken,
     },
     process.env.JWT_SECRET,
     {
@@ -118,15 +122,15 @@ const generateTokenProperty = (
   return jwt.sign(
     {
       id,
-  name,
-  email,
+      name,
+      email,
 
-  phone,
-  type,
+      phone,
+      type,
 
-  registrationNumber,
+      registrationNumber,
 
-  pushToken
+      pushToken,
     },
     process.env.JWT_SECRET,
     {
@@ -141,5 +145,5 @@ module.exports = {
   generateTokenEcom,
   generateTokenMaintenance,
   generateTokenProperty,
-  generateTokenCompany
+  generateTokenCompany,
 };

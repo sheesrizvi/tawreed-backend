@@ -270,6 +270,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
     min,
     max,
   } = req.query;
+
   const minprice = price ? min : 0;
   const maxprice = price ? max : 250000000;
   const filter = {
@@ -307,6 +308,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .populate("ecomBrand ecomCategory seller");
+
   res.json({ products, pageCount });
 });
 const getActiveProduct = asyncHandler(async (req, res) => {

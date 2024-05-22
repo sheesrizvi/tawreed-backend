@@ -1,15 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const authRoutes = require("./routes/authRoutes")
-const directoryRoutes = require("./routes/directoryRoutes")
-const ecomRoutes = require("./routes/ecomRoutes")
-const maintenanceRoutes = require("./routes/maintenanceRoutes")
-const propertyRoutes = require("./routes/propertyRoutes")
-const orderRoutes = require("./routes/orderRoutes")
-const upload = require("./routes/upload")
-const userRoutes = require("./routes/userRoutes")
-const misc = require("./routes/miscRoutes")
+const authRoutes = require("./routes/authRoutes");
+const directoryRoutes = require("./routes/directoryRoutes");
+const ecomRoutes = require("./routes/ecomRoutes");
+const maintenanceRoutes = require("./routes/maintenanceRoutes");
+const propertyRoutes = require("./routes/propertyRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const upload = require("./routes/upload");
+const userRoutes = require("./routes/userRoutes");
+const misc = require("./routes/miscRoutes");
 const cors = require("cors");
 
 const app = express();
