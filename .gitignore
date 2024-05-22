@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+tawreed-a7e95-firebase-adminsdk-8fgw4-6b612ed9bb.json
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

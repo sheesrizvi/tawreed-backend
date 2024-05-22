@@ -95,8 +95,10 @@ router.post("/send-notification", async (req, res) => {
 });
 router.post("/send-notification-all", async (req, res) => {
   const { title, body, image } = req.body;
-  const tokens = User.find({}).select("pushToken");
-  const registrationToken = tokens;
+  const tokens = await User.find({pushToken: {$exists: true}}).select("pushToken -_id");
+  const registrationToken = tokens.map((item) => item.pushToken);
+console.log(registrationToken.length)
+
   // let payload = {
   //   notification: {
   //     title: title,
@@ -167,7 +169,7 @@ router.post("/send-notification-all", async (req, res) => {
 
   admin
     .messaging()
-    .send(message)
+    .sendMulticast(message)
     .then((response) => {
       // Response is a message ID string.
       console.log("Successfully sent message:", response);
