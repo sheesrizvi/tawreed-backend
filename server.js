@@ -10,6 +10,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const upload = require("./routes/upload");
 const userRoutes = require("./routes/userRoutes");
 const misc = require("./routes/miscRoutes");
+const rnPushTokens = require("./routes/rnPushTokens");
 const cors = require("cors");
 
 const app = express();
@@ -30,6 +31,8 @@ app.use("/api/property", propertyRoutes);
 app.use("/api/directory", directoryRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/misc", misc);
+app.use("/api/rnPushTokens", rnPushTokens);
+
 mongoose
   .connect(source)
   .then(() => console.log("DB connected"))

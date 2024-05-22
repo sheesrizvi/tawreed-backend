@@ -32,7 +32,7 @@ router.post("/send-notification", async (req, res) => {
   //   // apns: {
   //   //   payload: {
   //   //     aps: {
-  //   //       'mutable-content': 1, 
+  //   //       'mutable-content': 1,
   //   //     },
   //   //   },
   //   //   fcm_options: {
@@ -58,44 +58,44 @@ router.post("/send-notification", async (req, res) => {
   //     throw new Error(error);
   //   });
 
-
   const message = {
     notification: {
       title: title,
-      body: body
+      body: body,
     },
     android: {
       notification: {
-        imageUrl: image }
+        imageUrl: image,
+      },
     },
     apns: {
       payload: {
         aps: {
-          'mutable-content': 1
-        }
+          "mutable-content": 1,
+        },
       },
       fcm_options: {
-        image: image
-      }
+        image: image,
+      },
     },
-    token: registrationToken
- 
+    token: registrationToken,
   };
-  
-  admin.messaging().send(message)
+
+  admin
+    .messaging()
+    .send(message)
     .then((response) => {
       // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-      res.json(response)
+      console.log("Successfully sent message:", response);
+      res.json(response);
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
+      console.log("Error sending message:", error);
     });
-
 });
 router.post("/send-notification-all", async (req, res) => {
-  const {  title, body, image } = req.body;
-const tokens = User.find({}).select("pushToken")
+  const { title, body, image } = req.body;
+  const tokens = User.find({}).select("pushToken");
   const registrationToken = tokens;
   // let payload = {
   //   notification: {
@@ -116,7 +116,7 @@ const tokens = User.find({}).select("pushToken")
   //   // apns: {
   //   //   payload: {
   //   //     aps: {
-  //   //       'mutable-content': 1, 
+  //   //       'mutable-content': 1,
   //   //     },
   //   //   },
   //   //   fcm_options: {
@@ -142,43 +142,40 @@ const tokens = User.find({}).select("pushToken")
   //     throw new Error(error);
   //   });
 
-
   const message = {
     notification: {
       title: title,
-      body: body
+      body: body,
     },
     android: {
       notification: {
-        imageUrl: image }
+        imageUrl: image,
+      },
     },
     apns: {
       payload: {
         aps: {
-          'mutable-content': 1
-        }
+          "mutable-content": 1,
+        },
       },
       fcm_options: {
-        image: image
-      }
+        image: image,
+      },
     },
-    tokens: registrationToken
- 
+    tokens: registrationToken,
   };
-  
-  admin.messaging().send(message)
+
+  admin
+    .messaging()
+    .send(message)
     .then((response) => {
       // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-      res.json(response)
+      console.log("Successfully sent message:", response);
+      res.json(response);
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
+      console.log("Error sending message:", error);
     });
-
 });
-
-
-
 
 module.exports = router;
