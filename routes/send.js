@@ -4,14 +4,15 @@ const router = express.Router();
 
 var serviceAccount = require("../tawreed-a7e95-firebase-adminsdk-8fgw4-6b612ed9bb.json");
 const User = require("../models/userModel");
+const Notification = require("../models/notificationModel");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
 router.post("/send-notification", async (req, res) => {
-  const { token, title, body, image } = req.body;
-
+  const { token, title, body, image, id } = req.body;
+  let user = [id];
   const registrationToken = token;
   // let payload = {
   //   notification: {
@@ -81,6 +82,19 @@ router.post("/send-notification", async (req, res) => {
     token: registrationToken,
   };
 
+  const createNoti = async () => {
+    const notification = await Notification.create({
+      title,
+      description,
+      users: user,
+    });
+    if (notification) {
+      res.status(201).json(notification);
+    } else {
+      res.status(404);
+      throw new Error("Error");
+    }
+  };
   admin
     .messaging()
     .send(message)
@@ -88,6 +102,7 @@ router.post("/send-notification", async (req, res) => {
       // Response is a message ID string.
       console.log("Successfully sent message:", response);
       res.json(response);
+      createNoti();
     })
     .catch((error) => {
       console.log("Error sending message:", error);
@@ -95,10 +110,27 @@ router.post("/send-notification", async (req, res) => {
 });
 router.post("/send-notification-all", async (req, res) => {
   const { title, body, image } = req.body;
-  const tokens = await User.find({pushToken: {$exists: true}}).select("pushToken -_id");
+  const tokens = await User.find({ pushToken: { $exists: true } }).select(
+    "pushToken -_id"
+  );
+  const user = await User.find({ pushToken: { $exists: true } }).select("_id");
   const registrationToken = tokens.map((item) => item.pushToken);
-console.log(registrationToken.length)
+  const users = user.map((item) => item._id);
+  console.log(users);
 
+  const createNoti = async () => {
+    const notification = await Notification.create({
+      title,
+      description: body,
+      users,
+    });
+    if (notification) {
+      console.log("success");
+    } else {
+      res.status(404);
+      throw new Error("Error");
+    }
+  };
   // let payload = {
   //   notification: {
   //     title: title,
@@ -172,12 +204,35 @@ console.log(registrationToken.length)
     .sendMulticast(message)
     .then((response) => {
       // Response is a message ID string.
-      console.log("Successfully sent message:", response);
-      res.json(response);
+      createNoti().then(() => {
+        console.log("Successfully sent message:", response);
+        res.json("success");
+      });
     })
     .catch((error) => {
       console.log("Error sending message:", error);
     });
+});
+
+router.get("/get-all", async (req, res) => {
+  const notifications = await Notification.find({});
+  if (notifications) {
+    res.status(201).json(notifications);
+  } else {
+    res.status(404);
+    throw new Error("Error");
+  }
+});
+router.get("/get-byuser", async (req, res) => {
+  const notifications = await Notification.find({
+    users: { $in: [req.query.userId] },
+  });
+  if (notifications) {
+    res.status(201).json(notifications);
+  } else {
+    res.status(404);
+    throw new Error("Error");
+  }
 });
 
 module.exports = router;
