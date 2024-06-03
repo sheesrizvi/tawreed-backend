@@ -28,6 +28,7 @@ const generateTokenCompany = (
     {
       id,
       name,
+      nameAr,
       email,
       phone,
       type,
