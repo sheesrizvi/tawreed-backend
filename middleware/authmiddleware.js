@@ -4,11 +4,10 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const Companies = require("../models/directory/companiesModel");
 const VendorEcom = require("../models/ecom/vendorEcomModel");
-const PropertyManager = require('../models/property/propertiesModel');
+const PropertyManager = require("../models/property/propertiesModel");
 const MaintenanceManager = require("../models/maintenance/maintenanceManager");
 
 const auth = asyncHandler(async (req, res, next) => {
-
   try {
     const token = req.header("x-auth-token");
     if (!token) return res.status(403).send("Access denied. Login Required");
@@ -21,11 +20,12 @@ const auth = asyncHandler(async (req, res, next) => {
     res.status(400).send("Invalid token");
   }
 });
-const admin = asyncHandler(async (req, res, next) => {
 
+const admin = asyncHandler(async (req, res, next) => {
   try {
     const token = req.header("x-auth-token");
-    if (!token) return res.status(403).send("Access denied. Admin Login Required");
+    if (!token)
+      return res.status(403).send("Access denied. Admin Login Required");
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await Admin.findById(decoded.id);
@@ -34,6 +34,7 @@ const admin = asyncHandler(async (req, res, next) => {
     res.status(400).send("Invalid token");
   }
 });
+
 const company = asyncHandler(async (req, res, next) => {
   try {
     const token = req.header("x-auth-token");
@@ -83,5 +84,11 @@ const maintenanceManager = asyncHandler(async (req, res, next) => {
   }
 });
 
-
-module.exports = { admin, auth, maintenanceManager, vendorEcom, propertyManager, company };
+module.exports = {
+  admin,
+  auth,
+  maintenanceManager,
+  vendorEcom,
+  propertyManager,
+  company,
+};

@@ -10,10 +10,10 @@ const maintenanceFormSchema = mongoose.Schema({
   //   { title: { type: String, required: true }, options: [{ type: String }] },
   // ],
   description: {
-    type: String
+    type: String,
   },
   dateTime: {
-    type: String
+    type: String,
   },
   location: {
     type: { type: String, default: "Point" },
@@ -27,13 +27,13 @@ const maintenanceFormSchema = mongoose.Schema({
   manager: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "MaintenanceManager"
+    ref: "MaintenanceManager",
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "User"
-  }
+    ref: "User",
+  },
 });
 
 const MaintenanceForm = mongoose.model(

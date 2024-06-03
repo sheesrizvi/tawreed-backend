@@ -27,7 +27,6 @@ const createProperty = asyncHandler(async (req, res) => {
     bathroom,
     rooms,
     size,
-
     status,
     propertyManager,
   } = req.body;
@@ -41,7 +40,7 @@ const createProperty = asyncHandler(async (req, res) => {
     image,
     location: {
       type: "Point",
-      coordinates: [location.lang, location.lat],
+      coordinates: [location.longitude, location.latitude],
     },
     details,
     price,
@@ -116,16 +115,17 @@ const deleteProperty = asyncHandler(async (req, res) => {
   await Properties.deleteOne({ _id: req.query.id });
   res.json("deleted");
 });
+
 const getAllProperties = asyncHandler(async (req, res) => {
   const { type, status, propertyType, price, min, max } = req.query;
+
   const minprice = price ? min : 0;
   const maxprice = price ? max : 2500000;
   const filter = {
     type,
     status,
     propertyType,
-    minprice,
-    maxprice,
+
     // rating: ratings,
   };
   const asArray = Object.entries(filter);
@@ -136,8 +136,8 @@ const getAllProperties = asyncHandler(async (req, res) => {
   const count = await Properties.countDocuments({
     $and: [
       justStrings,
-      { sell_price: { $gte: minprice } },
-      { sell_price: { $lte: maxprice } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   });
   var pageCount = Math.floor(count / 20);
@@ -147,8 +147,8 @@ const getAllProperties = asyncHandler(async (req, res) => {
   const products = await Properties.find({
     $and: [
       justStrings,
-      { sell_price: { $gte: minprice } },
-      { sell_price: { $lte: maxprice } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   })
     .limit(pageSize)
@@ -158,6 +158,12 @@ const getAllProperties = asyncHandler(async (req, res) => {
 
   res.json({ products, pageCount });
 });
+
+const getAllPropertiesAdmin = asyncHandler(async (req, res) => {
+  const sellers = await Properties.find({});
+  res.json(sellers);
+});
+
 const getActiveProperties = asyncHandler(async (req, res) => {
   const { type, status, propertyType, price, min, max } = req.query;
   const minprice = price ? min : 0;
@@ -249,4 +255,5 @@ module.exports = {
   getAllProperties,
   getPropertyById,
   searchProperty,
+  getAllPropertiesAdmin,
 };

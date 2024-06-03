@@ -13,7 +13,7 @@ admin.initializeApp({
 router.post("/send-notification", async (req, res) => {
   const { token, title, body, image, id } = req.body;
   let user = [];
-user.push(id)
+  user.push(id);
 
   const registrationToken = token;
   // let payload = {
@@ -102,18 +102,16 @@ user.push(id)
     .send(message)
     .then((response) => {
       // Response is a message ID string.
-     
+
       createNoti().then(() => {
         console.log("Successfully sent message:", response);
         res.json("success");
       });
-     
     })
     .catch((error) => {
       console.log("Error sending message:", error);
     });
 });
-
 
 router.post("/send-notification-all", async (req, res) => {
   const { title, body, image } = req.body;
@@ -123,7 +121,6 @@ router.post("/send-notification-all", async (req, res) => {
   const user = await User.find({ pushToken: { $exists: true } }).select("_id");
   const registrationToken = tokens.map((item) => item.pushToken);
   const users = user.map((item) => item._id);
-  
 
   const createNoti = async () => {
     const notification = await Notification.create({

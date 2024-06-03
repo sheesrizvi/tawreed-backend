@@ -25,7 +25,8 @@ const createCategory = asyncHandler(async (req, res) => {
   const maintenanceCategory = await MaintenanceCategory.create({
     name,
     description,
-    nameAr, descriptionAr,
+    nameAr,
+    descriptionAr,
     image,
     active,
   });
@@ -37,7 +38,7 @@ const createCategory = asyncHandler(async (req, res) => {
   }
 });
 const updateCategory = asyncHandler(async (req, res) => {
-  const { id, name, description, image, nameAr, descriptionAr, } = req.body;
+  const { id, name, description, image, nameAr, descriptionAr } = req.body;
   const maintenanceCategory = await MaintenanceCategory.findById(id);
   if (maintenanceCategory) {
     maintenanceCategory.name = name;
@@ -80,7 +81,7 @@ const getActiveCategory = asyncHandler(async (req, res) => {
 });
 const setMyCategory = asyncHandler(async (req, res) => {
   const { id, category } = req.body;
- 
+
   const manager = await MaintenanceManager.findById(id);
   if (manager) {
     manager.maintenanceCategory = category;
@@ -89,19 +90,20 @@ const setMyCategory = asyncHandler(async (req, res) => {
   } else {
     res.json("Not Found");
   }
- 
 });
 const getMyCategory = asyncHandler(async (req, res) => {
-  
-  const manager = await MaintenanceManager.find({_id: req.query.id}, "maintenanceCategory")
-  
-  const arr = await MaintenanceCategory.find({_id: {$in: manager[0].maintenanceCategory}})
+  const manager = await MaintenanceManager.find(
+    { _id: req.query.id },
+    "maintenanceCategory"
+  );
 
-  res.send(arr)
- 
+  const arr = await MaintenanceCategory.find({
+    _id: { $in: manager[0].maintenanceCategory },
+  });
+
+  res.send(arr);
 });
 const delMyCategory = asyncHandler(async (req, res) => {
-  
   const { id, category } = req.query;
 
   const manager = await MaintenanceManager.findById(id);
@@ -113,7 +115,6 @@ const delMyCategory = asyncHandler(async (req, res) => {
   } else {
     res.json("Not Found");
   }
- 
 });
 
 const activateDeactivateCategory = asyncHandler(async (req, res) => {
@@ -232,21 +233,26 @@ const createManagerReview = asyncHandler(async (req, res) => {
 });
 
 const getMaintenanceByCategory = asyncHandler(async (req, res) => {
+  var arr = [req.query.CompanyCategory];
   const page = Number(req.query.pageNumber) || 1;
+  const pageSize = 30;
   const count = await MaintenanceManager.countDocuments({
     $and: [
       { registered: true },
-      { CompanyCategory: req.query.CompanyCategory },
+      { maintenanceCategory: { $in: arr } },
+      // { CompanyCategory: req.query.CompanyCategory },
     ],
   });
   var pageCount = Math.floor(count / 20);
   if (count % 20 !== 0) {
     pageCount = pageCount + 1;
   }
+
   const companies = await MaintenanceManager.find({
     $and: [
       { registered: true },
-      { companyCategory: req.query.CompanyCategory },
+      { maintenanceCategory: { $in: arr } },
+      // { companyCategory: req.query.CompanyCategory },
     ],
   })
     .limit(pageSize)
@@ -269,5 +275,5 @@ module.exports = {
   createManagerReview,
   setMyCategory,
   getMyCategory,
-  delMyCategory
+  delMyCategory,
 };

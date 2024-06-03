@@ -13,6 +13,7 @@ const {
   deleteProduct,
   updateProduct,
   createProductReview,
+  searchProducts,
 } = require("../controller/ecomController");
 const {
   ecomSellers,
@@ -24,6 +25,7 @@ const router = express.Router();
 //admin
 router.route("/category").post(createCategory);
 router.route("/get-categories").get(getAllCategory);
+router.route("/search").get(searchProducts);
 router.route("/delete-categories").delete(deleteCategory);
 router.route("/brands").post(createBrand);
 router.route("/get-brands").get(getAllBrands);

@@ -8,7 +8,7 @@ const Companies = require("../models/directory/companiesModel");
 
 router.post("/register-token-user", async (req, res) => {
   // const User = req.body.user;
-  console.log("hit");
+
   const user = await User.findById(req.body.user._id);
 
   if (!user) return res.status(400).send({ error: "Invalid user." });

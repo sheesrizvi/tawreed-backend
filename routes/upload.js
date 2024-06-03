@@ -22,7 +22,7 @@ const s3 = new S3Client(config);
 const upload = multer({
   storage: multerS3({
     s3,
-   
+
     bucket: process.env.AWS_BUCKET,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
@@ -32,35 +32,40 @@ const upload = multer({
   }),
 });
 
-router.post("/uploadMultiple", auth, upload.array("image", 150), async( req, res) => {
-  const result = req.files
- 
-  let arr = []
+router.post("/uploadMultiple", upload.array("image", 150), async (req, res) => {
+  const result = req.files;
+
+  let arr = [];
   result.forEach((single) => {
-arr.push(single.location)
-  })
-  
+    arr.push(single.location);
+  });
+
   //define what to do if result is empty
   res.send(arr);
 });
 
-router.post("/uploadSingleImage", auth, upload.single("image"), async( req, res) => {
-  const result = req.file
-  //define what to do if result is empty
-  res.send(`${result.location}`);
-});
+router.post(
+  "/uploadSingleImage",
+  auth,
+  upload.single("image"),
+  async (req, res) => {
+    const result = req.file;
+    //define what to do if result is empty
+    res.send(`${result.location}`);
+  }
+);
 
 router.delete("/deleteImage", admin, async (req, res) => {
   const image = req.query.image;
   image.map(async (file) => {
     const fileName = file.split("//")[1].split("/")[1];
-  
-      const command = new DeleteObjectCommand({
-        Bucket: process.env.AWS_BUCKET,
-        Key: fileName,
-      });
-      const response = await s3.send(command);
-      console.log(response)
+
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.AWS_BUCKET,
+      Key: fileName,
+    });
+    const response = await s3.send(command);
+    console.log(response);
   });
 });
 

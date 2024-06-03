@@ -109,8 +109,10 @@ const getAllCompany = asyncHandler(async (req, res) => {
 
   res.json({ companies, pageCount });
 });
+
 const getCompanyByCategory = asyncHandler(async (req, res) => {
   const page = Number(req.query.pageNumber) || 1;
+  const pageSize = 20;
   const count = await Companies.countDocuments({
     $and: [
       { registered: true },

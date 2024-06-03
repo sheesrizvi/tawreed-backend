@@ -35,23 +35,29 @@ const maintenanceManagerSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    maintenanceCategory: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "MaintenanceCategory",
-    }],
+    maintenanceCategory: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MaintenanceCategory",
+      },
+    ],
     phone: {
       type: Number,
       required: true,
     },
-    services: [{
-      name: {type: String}
-    }],
-    servicesAr: [{
-      name: {type: String}
-    }],
-    logo: {
-        type: String,
+    services: [
+      {
+        name: { type: String },
       },
+    ],
+    servicesAr: [
+      {
+        name: { type: String },
+      },
+    ],
+    logo: {
+      type: String,
+    },
     registrationNumber: {
       type: String,
       required: true,
@@ -66,16 +72,17 @@ const maintenanceManagerSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      default: "maintenance"
+      default: "maintenance",
     },
-   
   },
   {
     timestamps: true,
   }
 );
 
-maintenanceManagerSchema.methods.matchPassword = async function (enteredPassword) {
+maintenanceManagerSchema.methods.matchPassword = async function (
+  enteredPassword
+) {
   return await bycrypt.compare(enteredPassword, this.password);
 };
 
@@ -87,6 +94,9 @@ maintenanceManagerSchema.pre("save", async function (next) {
   this.password = await bycrypt.hash(this.password, salt);
 });
 
-const MaintenanceManager = mongoose.model("MaintenanceManager", maintenanceManagerSchema);
+const MaintenanceManager = mongoose.model(
+  "MaintenanceManager",
+  maintenanceManagerSchema
+);
 
 module.exports = MaintenanceManager;
