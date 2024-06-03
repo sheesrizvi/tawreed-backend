@@ -119,36 +119,35 @@ const deleteProperty = asyncHandler(async (req, res) => {
 const getAllProperties = asyncHandler(async (req, res) => {
   const { type, status, propertyType, price, min, max } = req.query;
   const minprice = price ? min : 0;
-  const maxprice = price ? max : 2500000;
+  const maxprice = price ? max : 250000000;
   const filter = {
     type,
     status,
     propertyType,
-    minprice,
-    maxprice,
-    // rating: ratings,
   };
   const asArray = Object.entries(filter);
   const filtered = asArray.filter(([key, value]) => value);
   const justStrings = Object.fromEntries(filtered);
   const page = Number(req.query.pageNumber) || 1;
   const pageSize = 30;
+
   const count = await Properties.countDocuments({
     $and: [
       justStrings,
-      { sell_price: { $gte: minprice } },
-      { sell_price: { $lte: maxprice } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   });
-  var pageCount = Math.floor(count / 20);
-  if (count % 20 !== 0) {
+  console.log(count)
+  var pageCount = Math.floor(count / 30);
+  if (count % 30 !== 0) {
     pageCount = pageCount + 1;
   }
   const products = await Properties.find({
     $and: [
       justStrings,
-      { sell_price: { $gte: minprice } },
-      { sell_price: { $lte: maxprice } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   })
     .limit(pageSize)

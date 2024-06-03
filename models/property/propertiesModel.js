@@ -58,7 +58,7 @@ const propertiesSchema = mongoose.Schema({
     coordinates: { type: [Number], index: "2dsphere" },
   },
   price: {
-    type: String,
+    type: Number,
   },
 });
 
