@@ -17,13 +17,11 @@ const generateTokenUser = (id, name, email, shippingAddress, phone) => {
 const generateTokenCompany = (
   id,
   name,
+  nameAr,
   email,
-
   phone,
   type,
-
   registrationNumber,
-
   pushToken
 ) => {
   return jwt.sign(
@@ -31,12 +29,9 @@ const generateTokenCompany = (
       id,
       name,
       email,
-
       phone,
       type,
-
       registrationNumber,
-
       pushToken,
     },
     process.env.JWT_SECRET,
@@ -48,6 +43,7 @@ const generateTokenCompany = (
 const generateTokenEcom = (
   id,
   name,
+  nameAr,
   email,
 
   phone,
@@ -60,6 +56,7 @@ const generateTokenEcom = (
   return jwt.sign(
     {
       name,
+      nameAr,
       email,
 
       id,
@@ -79,6 +76,7 @@ const generateTokenEcom = (
 const generateTokenMaintenance = (
   id,
   name,
+  nameAr,
   email,
 
   phone,
@@ -92,6 +90,7 @@ const generateTokenMaintenance = (
     {
       id,
       name,
+      nameAr,
       email,
 
       phone,
@@ -110,6 +109,7 @@ const generateTokenMaintenance = (
 const generateTokenProperty = (
   id,
   name,
+  nameAr,
   email,
 
   phone,
@@ -123,6 +123,7 @@ const generateTokenProperty = (
     {
       id,
       name,
+      nameAr,
       email,
 
       phone,
