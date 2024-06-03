@@ -14,6 +14,7 @@ const {
   updateProduct,
   createProductReview,
   searchProducts,
+  getProductBySeller,
 } = require("../controller/ecomController");
 const {
   ecomSellers,
@@ -32,6 +33,7 @@ router.route("/get-brands").get(getAllBrands);
 router.route("/delete-brands").delete(deleteBrand);
 router.route("/products").post(createProduct);
 router.route("/products").get(getAllProduct);
+router.route("/byseller").get(getProductBySeller);
 router.route("/edit-product").get(updateProduct);
 router.route("/delete-products").delete(deleteProduct);
 router.route("/get-all-sellers").get(admin, allEcomSellers);

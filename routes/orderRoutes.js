@@ -9,6 +9,7 @@ const {
   getFailedOnlineOrders,
   updateOrderToPaidAdmin,
   getOrders,
+  getOrderBySeller,
 } = require("../controller/orderController");
 
 const router = express.Router();
@@ -16,6 +17,7 @@ const router = express.Router();
 //products
 router.route("/").get(getOrders);
 router.route("/myorders").get(getMyOrders);
+router.route("/byseller").get(getOrderBySeller);
 router.route("/update").post(updateOrderDeliveryStatus);
 router.route("/create-order").post(addOrderItems);
 router.route("/getPendingOrders").get(getPendingOrders);

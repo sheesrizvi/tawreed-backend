@@ -59,6 +59,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     paymentResult,
     deliveryStatus,
     userId,
+    seller,
     notes,
   } = req.body;
 
@@ -66,6 +67,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     const order = await Order.create({
       orderItems,
       user: userId,
+      seller,
       shippingAddress,
       paymentResult,
       paymentMethod,
@@ -99,6 +101,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     const order = await Order.create({
       orderItems,
       user: userId,
+      seller,
       shippingAddress,
       paymentResult,
       paymentMethod,
@@ -168,6 +171,23 @@ const getMyOrders = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .skip(pageSize * (page - 1));
   res.json(orders);
+});
+const getOrderBySeller = asyncHandler(async (req, res) => {
+  const pageSize = 30;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await Order.countDocuments({ seller: req.query.sellerId })
+  var pageCount = Math.floor(count / 30);
+  if (count % 30 !== 0) {
+    pageCount = pageCount + 1;
+  }
+ 
+    
+  const orders = await Order.find({seller: req.query.sellerId})
+    .sort({ createdAt: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+
+  res.json({orders, pageCount});
 });
 const getPendingOrders = asyncHandler(async (req, res) => {
   const count = await Order.countDocuments({
@@ -324,4 +344,5 @@ module.exports = {
   getPendingOrders,
   getSalesDateRange,
   updateOrderToUnPaid,
+  getOrderBySeller
 };
