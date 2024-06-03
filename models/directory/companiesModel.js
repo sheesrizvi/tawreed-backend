@@ -57,7 +57,7 @@ const companiesSchema = mongoose.Schema(
       required: true,
       default: "undefined",
     },
-   
+
     registrationNumber: {
       type: String,
       required: true,

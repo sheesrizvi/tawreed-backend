@@ -178,18 +178,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
   const page = Number(req.query.pageNumber) || 1;
-  const pageSize = 30;
-  const count = await User.countDocuments({
-   
-  });
+  const count = await User.countDocuments({});
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
   }
-  const users = await User.find({}).limit(pageSize)
-  .sort({ createdAt: -1 })
-  .skip(pageSize * (page - 1))
-  res.json({users, pageCount});
+  const users = await User.find({});
+  res.json({ users, pageCount });
 });
 
 // @desc    Delete users

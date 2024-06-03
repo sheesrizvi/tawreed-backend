@@ -81,7 +81,6 @@ const ecomSellers = asyncHandler(async (req, res) => {
 });
 const allEcomSellers = asyncHandler(async (req, res) => {
   const sellers = await VendorEcom.find({});
-
   res.json(sellers);
 });
 const deleteSeller = asyncHandler(async (req, res) => {
@@ -150,20 +149,24 @@ const company = asyncHandler(async (req, res) => {
     active: true,
   });
   var pageCount = Math.floor(count / 30);
+  console.log(pageCount);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
   }
-  const sellers = await Companies.find({}, "_id name")
+  const sellers = await Companies.find({})
     .limit(pageSize)
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1));
+
   res.json({ sellers, pageCount });
 });
+
 const allCompanies = asyncHandler(async (req, res) => {
   const sellers = await Companies.find({});
 
   res.json(sellers);
 });
+
 const deletecompany = asyncHandler(async (req, res) => {
   await Companies.deleteOne({ _id: req.query.id });
   res.json("deleted");
