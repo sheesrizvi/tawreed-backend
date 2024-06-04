@@ -189,6 +189,7 @@ const getsubmittedForms = asyncHandler(async (req, res) => {
     const submittedForm = await MaintenanceForm.find({
       maintenanceCategory,
     }).populate("user maintenanceForm maintenanceCategory");
+    console.log(submittedForm);
     res.json({ submittedForm });
   } else {
     const submittedForm = await MaintenanceForm.find({});

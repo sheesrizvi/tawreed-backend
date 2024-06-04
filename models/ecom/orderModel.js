@@ -7,7 +7,7 @@ const orderSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
-    
+
     orderItems: [
       {
         name: { type: String, required: true },
@@ -23,6 +23,7 @@ const orderSchema = mongoose.Schema(
           required: true,
           ref: "VendorEcom",
         },
+        finalprice: { type: Number, required: true },
       },
     ],
     shippingAddress: {

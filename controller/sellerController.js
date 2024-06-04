@@ -324,7 +324,7 @@ const registerEcomVendor = asyncHandler(async (req, res) => {
     registered,
     pushToken,
   } = req.body;
-  console.log(req.body);
+
   const userExists = await VendorEcom.findOne({ email });
 
   if (userExists) {

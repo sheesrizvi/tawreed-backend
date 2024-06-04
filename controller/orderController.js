@@ -63,63 +63,60 @@ const addOrderItems = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (paymentMethod == "COD") {
+    const orderN = async (el) => {
+      let newOrderItems = orderItems.filter((element) => element.seller == el);
+
+      const sumbTotal = () => {
+        return newOrderItems.reduce((sum, item) => {
+          return sum + parseFloat(item.finalprice) * parseFloat(item.qty);
+        }, 0);
+      };
+
+      const sumTotal = sumbTotal();
+
+      const order = await Order.create({
+        orderItems: newOrderItems,
+        user: userId,
+        shippingAddress,
+        paymentResult,
+        paymentMethod,
+        itemsPrice: sumTotal,
+        deliveryStatus,
+        isPaid: false,
+        shippingPrice,
+        totalPrice: sumTotal,
+        notes,
+      });
+      if (order) {
+        for (let i = 0; i < orderItems.length; i++) {
+          const product = await EcomProduct.findById(orderItems[i].ecomproduct);
+
+          if (product) {
+            product.countInStock = product.countInStock - orderItems[i].qty;
+            await product.save();
+          }
+        }
+        // reward algo
+        // const reward = await UserReward.findOne({ user: userId });
+
+        // const a = reward.amount + itemsPrice * 0.1;
+        // reward.amount = a;
+        // await reward.save();
+
+        //   sendEmail(orderItems, paymentMethod, totalPrice, user);
+        // res.status(201).json(order);
+      }
+    };
+
     let unique_values = [
       ...new Set(orderItems.map((element) => element.seller)),
-  ];
-  unique_values.forEach(element => {
-    orderN(element)
-  });
-
-  const orderN =async (el) => {
-    let newOrderItems = orderItems.map((element) => element.seller == el) 
-    const order = await Order.create({
-      orderItems: newOrderItems,
-      user: userId,
-      shippingAddress,
-      paymentResult,
-      paymentMethod,
-      itemsPrice,
-      deliveryStatus,
-      isPaid: false,
-      shippingPrice,
-      totalPrice,
-      notes,
+    ];
+    unique_values.forEach((element) => {
+      console.log(element);
+      orderN(element);
     });
-    if (order) {
-      for (let i = 0; i < orderItems.length; i++) {
-        const product = await EcomProduct.findById(orderItems[i].ecomproduct);
 
-        if (product) {
-          product.countInStock = product.countInStock - orderItems[i].qty;
-          await product.save();
-        }
-      }
-      // reward algo
-      // const reward = await UserReward.findOne({ user: userId });
-
-      // const a = reward.amount + itemsPrice * 0.1;
-      // reward.amount = a;
-      // await reward.save();
-
-      //   sendEmail(orderItems, paymentMethod, totalPrice, user);
-      res.status(201).json(order);
-    }
-  }
-    
-    // const order = await Order.create({
-    //   orderItems,
-    //   user: userId,
-    //   shippingAddress,
-    //   paymentResult,
-    //   paymentMethod,
-    //   itemsPrice,
-    //   deliveryStatus,
-    //   isPaid: false,
-    //   shippingPrice,
-    //   totalPrice,
-    //   notes,
-    // });
-    
+    res.status(201).json("success");
   } else {
     const order = await Order.create({
       orderItems,
@@ -198,13 +195,15 @@ const getMyOrders = asyncHandler(async (req, res) => {
 const getOrderBySeller = asyncHandler(async (req, res) => {
   const pageSize = 30;
   const page = Number(req.query.pageNumber) || 1;
-  const count = await Order.countDocuments({ seller: req.query.sellerId });
+  const count = await Order.countDocuments({
+    "orderItems.seller": req.query.sellerId,
+  });
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
   }
 
-  const orders = await Order.find({ seller: req.query.sellerId })
+  const orders = await Order.find({ "orderItems.seller": req.query.sellerId })
     .sort({ createdAt: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
