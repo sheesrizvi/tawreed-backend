@@ -452,10 +452,11 @@ const searchProducts = asyncHandler(async (req, res) => {
 });
 
 const getProductBySeller = asyncHandler(async (req, res) => {
-
   const pageSize = 30;
   const page = Number(req.query.pageNumber) || 1;
-  const count = await EcomProduct.countDocuments({ seller: req.query.sellerId })
+  const count = await EcomProduct.countDocuments({
+    seller: req.query.sellerId,
+  });
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
@@ -465,8 +466,8 @@ const getProductBySeller = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .skip(pageSize * (page - 1))
     .populate("ecomBrand ecomCategory seller");
-  
-  res.json({products, pageCount});
+
+  res.json({ products, pageCount });
 });
 
 module.exports = {
