@@ -91,12 +91,9 @@ const registerCompany = asyncHandler(async (req, res) => {
         company.name,
         company.nameAr,
         company.email,
-
         company.phone,
-
         company.type,
         company.registrationNumber,
-
         company.pushToken
       ),
     });

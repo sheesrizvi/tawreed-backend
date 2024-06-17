@@ -25,8 +25,8 @@ const propertyManagerSchema = mongoose.Schema(
       required: true,
     },
     logo: {
-        type: String,
-      },
+      type: String,
+    },
     registrationNumber: {
       type: String,
       required: true,
@@ -41,9 +41,8 @@ const propertyManagerSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      default: "property"
+      default: "property",
     },
-   
   },
   {
     timestamps: true,
@@ -62,6 +61,9 @@ propertyManagerSchema.pre("save", async function (next) {
   this.password = await bycrypt.hash(this.password, salt);
 });
 
-const PropertyManager = mongoose.model("PropertyManager", propertyManagerSchema);
+const PropertyManager = mongoose.model(
+  "PropertyManager",
+  propertyManagerSchema
+);
 
 module.exports = PropertyManager;

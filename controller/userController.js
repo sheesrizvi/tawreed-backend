@@ -242,16 +242,13 @@ const updateUser = asyncHandler(async (req, res) => {
 const saveShippingAddress = asyncHandler(async (req, res) => {
   const user = await User.findById(req.body.userId);
   if (user) {
-    user.shippingAddress.email =
-      req.body.shippingAddress.email || user.shippingAddress.email;
-    user.shippingAddress.address =
-      req.body.shippingAddress.address || user.shippingAddress.address;
+    user.shippingAddress = req.body.shippingAddress || user.shippingAddress;
     const updatedUser = await user.save();
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
-      shippingAddress: updateUser.shippingAddress,
+      shippingAddress: updatedUser.shippingAddress,
       token: generateTokenUser(
         updatedUser._id,
         updatedUser.name,
