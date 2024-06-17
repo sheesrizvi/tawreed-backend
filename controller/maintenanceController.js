@@ -188,7 +188,20 @@ const getsubmittedForms = asyncHandler(async (req, res) => {
   if (maintenanceCategory) {
     const submittedForm = await MaintenanceForm.find({
       maintenanceCategory,
-    }).populate("user maintenanceForm maintenanceCategory");
+    }).populate("user maintenanceCategory");
+    console.log(submittedForm);
+    res.json({ submittedForm });
+  } else {
+    const submittedForm = await MaintenanceForm.find({});
+    res.json({ submittedForm });
+  }
+});
+const getsubmittedFormsByManager = asyncHandler(async (req, res) => {
+  const { maintenanceCategory } = req.query;
+  if (maintenanceCategory) {
+    const submittedForm = await MaintenanceForm.find({
+      manager: req.query.manager,
+    }).populate("user maintenanceCategory");
     console.log(submittedForm);
     res.json({ submittedForm });
   } else {
@@ -277,4 +290,5 @@ module.exports = {
   setMyCategory,
   getMyCategory,
   delMyCategory,
+  getsubmittedFormsByManager
 };

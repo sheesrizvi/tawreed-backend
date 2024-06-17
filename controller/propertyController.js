@@ -161,6 +161,23 @@ const getAllProperties = asyncHandler(async (req, res) => {
   res.json({ products, pageCount });
 });
 
+const getAllPropertiesManager = asyncHandler(async (req, res) => {
+  const pageSize = 30;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await Properties.countDocuments({
+    propertyManager: req.query.manager,
+  });
+  var pageCount = Math.floor(count / 30);
+  if (count % 30 !== 0) {
+    pageCount = pageCount + 1;
+  }
+  const sellers = await Properties.find({ propertyManager: req.query.manager })
+    .limit(pageSize)
+    .sort({ createdAt: -1 })
+    .skip(pageSize * (page - 1))
+    .populate("propertyManager");
+  res.json(sellers);
+});
 const getAllPropertiesAdmin = asyncHandler(async (req, res) => {
   const sellers = await Properties.find({});
   res.json(sellers);
@@ -258,4 +275,5 @@ module.exports = {
   getPropertyById,
   searchProperty,
   getAllPropertiesAdmin,
+  getAllPropertiesManager,
 };

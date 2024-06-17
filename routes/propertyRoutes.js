@@ -13,6 +13,7 @@ const {
   updateProperty,
   getAllPropertiesAdmin,
   searchProperty,
+  getAllPropertiesManager,
 } = require("../controller/propertyController");
 const router = express.Router();
 
@@ -27,5 +28,6 @@ router.route("/delete-property").delete(deleteProperty);
 router.route("/get-all-sellers").get(allPropertyManagers);
 router.route("/get-sellers").get(admin, propertyManagers);
 router.route("/delete-sellers").delete(admin, deletePropertyManagers);
+router.route("/by-manager").get( getAllPropertiesManager);
 
 module.exports = router;
