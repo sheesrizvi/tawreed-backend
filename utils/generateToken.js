@@ -112,12 +112,9 @@ const generateTokenProperty = (
   name,
   nameAr,
   email,
-
   phone,
   type,
-
   registrationNumber,
-
   pushToken
 ) => {
   return jwt.sign(

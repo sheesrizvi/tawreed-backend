@@ -91,12 +91,9 @@ const registerCompany = asyncHandler(async (req, res) => {
         company.name,
         company.nameAr,
         company.email,
-
         company.phone,
-
         company.type,
         company.registrationNumber,
-
         company.pushToken
       ),
     });
@@ -324,7 +321,7 @@ const registerEcomVendor = asyncHandler(async (req, res) => {
     registered,
     pushToken,
   } = req.body;
-  console.log(req.body);
+
   const userExists = await VendorEcom.findOne({ email });
 
   if (userExists) {

@@ -212,6 +212,7 @@ const setMyCategory = asyncHandler(async (req, res) => {
     res.json("Not Found");
   }
 });
+
 const getMyCategory = asyncHandler(async (req, res) => {
   const manager = await Companies.find(
     { _id: req.query.id },
@@ -223,6 +224,7 @@ const getMyCategory = asyncHandler(async (req, res) => {
 
   res.send(arr);
 });
+
 const delMyCategory = asyncHandler(async (req, res) => {
   const { id, category } = req.query;
 
@@ -260,7 +262,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 const getProfile = asyncHandler(async (req, res) => {
   const { id } = req.query;
 
-  const manager = await Companies.findById(id);
+  const manager = await Companies.findById(id).populate("website");
   res.json(manager);
 });
 

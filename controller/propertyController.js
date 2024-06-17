@@ -141,7 +141,7 @@ const getAllProperties = asyncHandler(async (req, res) => {
       { price: { $lte: maxprice } },
     ],
   });
-  console.log(count)
+  console.log(count);
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
