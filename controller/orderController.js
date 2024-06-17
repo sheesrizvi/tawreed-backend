@@ -94,14 +94,6 @@ const addOrderItems = asyncHandler(async (req, res) => {
           await product.save();
         }
       }
-      // reward algo
-      // const reward = await UserReward.findOne({ user: userId });
-
-      // const a = reward.amount + itemsPrice * 0.1;
-      // reward.amount = a;
-      // await reward.save();
-
-      //   sendEmail(orderItems, paymentMethod, totalPrice, user);
       res.status(201).json(order);
     }
   }
