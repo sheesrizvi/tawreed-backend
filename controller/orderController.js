@@ -310,12 +310,12 @@ const updateOrderDeliveryStatus = asyncHandler(async (req, res) => {
 const getOrders = asyncHandler(async (req, res) => {
   const pageSize = 30;
   const page = Number(req.query.pageNumber) || 1;
-  const count = await Order.countDocuments({ isPaid: true });
+  const count = await Order.countDocuments({  });
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
   }
-  const orders = await Order.find({ isPaid: true })
+  const orders = await Order.find({  })
     .sort({ createdAt: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
