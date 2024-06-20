@@ -34,7 +34,7 @@ router.route("/delete-brands").delete(deleteBrand);
 router.route("/products").post(createProduct);
 router.route("/products").get(getAllProduct);
 router.route("/byseller").get(getProductBySeller);
-router.route("/edit-product").get(updateProduct);
+router.route("/edit-product").post(updateProduct);
 router.route("/delete-products").delete(deleteProduct);
 router.route("/get-all-sellers").get(admin, allEcomSellers);
 router.route("/get-sellers").get(admin, ecomSellers);

@@ -217,6 +217,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     discount,
     countInStock,
   } = req.body;
+
   const ecomProduct = await EcomProduct.findById(id);
   if (ecomProduct) {
     ecomProduct.name = name;

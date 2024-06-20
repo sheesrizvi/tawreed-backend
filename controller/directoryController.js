@@ -242,15 +242,28 @@ const delMyCategory = asyncHandler(async (req, res) => {
 //profile
 
 const updateProfile = asyncHandler(async (req, res) => {
-  const { id, website, description, details, image, address } = req.body;
+  const {
+    id,
+    website,
+    description,
+    details,
+    image,
+    address,
+    addressAr,
+    descriptionAr,
+    detailsAr,
+  } = req.body;
 
   const manager = await Companies.findById(id);
 
   if (manager) {
     manager.website = website;
     manager.address = address;
+    manager.addressAr = addressAr;
     manager.description = description;
+    manager.descriptionAr = descriptionAr;
     manager.details = details;
+    manager.detailsAr = detailsAr;
     manager.image = image;
     const updatedCategory = await manager.save();
 

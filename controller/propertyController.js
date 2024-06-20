@@ -74,6 +74,7 @@ const updateProperty = asyncHandler(async (req, res) => {
     status,
     id,
   } = req.body;
+
   const property = await Properties.findById(id);
   if (property) {
     property.name = name;
@@ -86,7 +87,7 @@ const updateProperty = asyncHandler(async (req, res) => {
     property.details = details;
     property.detailsAr = detailsAr;
     property.price = price;
-    property.location = location;
+    property.location = location ? location : property.location;
 
     const updatedProperty = await property.save();
 
@@ -125,8 +126,6 @@ const getAllProperties = asyncHandler(async (req, res) => {
     type,
     status,
     propertyType,
-
-    // rating: ratings,
   };
   const asArray = Object.entries(filter);
   const filtered = asArray.filter(([key, value]) => value);
@@ -141,7 +140,7 @@ const getAllProperties = asyncHandler(async (req, res) => {
       { price: { $lte: maxprice } },
     ],
   });
-  console.log(count);
+
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
