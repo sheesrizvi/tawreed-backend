@@ -6,6 +6,8 @@ const {
   S3Client,
 } = require("@aws-sdk/client-s3");
 const Wishlist = require("../models/wishlistModel");
+const FeaturedProduct = require("../models/ecom/featuredProduct");
+const FeaturedProperty = require("../models/property/featuredProperty");
 const config = {
   region: process.env.AWS_BUCKET_REGION,
   credentials: {
@@ -80,6 +82,69 @@ const addWishlistItems = asyncHandler(async (req, res) => {
     res.json(wishlist);
   }
 });
+const createfeaturedProduct = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+
+  const orderAgain = FeaturedProduct.create({
+    product: id,
+  });
+  if (orderAgain) {
+    res.status(201).json(orderAgain);
+  } else {
+    res.status(404);
+    throw new Error("Error");
+  }
+});
+const createfeaturedProperty = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+
+  const orderAgain = FeaturedProperty.create({
+    property: id,
+  });
+  if (orderAgain) {
+    res.status(201).json(orderAgain);
+  } else {
+    res.status(404);
+    throw new Error("Error");
+  }
+});
+const getfeaturedProperties = asyncHandler(async (req, res) => {
+  const orderAgain = await FeaturedProperty.find({}).populate({
+    path: "property",
+    populate: [
+      {
+        path: "propertyManager",
+      },
+      
+    ],
+  });
+  res.json(orderAgain);
+});
+const getfeaturedProducts = asyncHandler(async (req, res) => {
+  const orderAgain = await FeaturedProduct.find({}).populate({
+    path: "product",
+    populate: [
+      {
+        path: "ecomCategory",
+      },
+      {
+        path: "ecomBrand",
+      },
+      {
+        path: "seller",
+      },
+    ],
+  });
+  res.json(orderAgain);
+});
+const deletefeaturedProduct = asyncHandler(async (req, res) => {
+  await FeaturedProduct.deleteOne({ _id: req.query.id });
+  res.json("deleted");
+});
+const deletefeaturedProperty = asyncHandler(async (req, res) => {
+  await FeaturedProperty.deleteOne({ _id: req.query.id });
+  res.json("deleted");
+});
 
 const deleteWishlistItems = asyncHandler(async (req, res) => {
   const { items, user } = req.body;
@@ -98,5 +163,11 @@ module.exports = {
   deleteBanner,
   addWishlistItems,
   deleteWishlistItems,
-  getBanner
+  getBanner,
+  deletefeaturedProduct,
+  deletefeaturedProperty,
+  createfeaturedProduct,
+  createfeaturedProperty,
+  getfeaturedProducts,
+  getfeaturedProperties
 };

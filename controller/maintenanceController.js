@@ -189,28 +189,23 @@ const getsubmittedForms = asyncHandler(async (req, res) => {
     const submittedForm = await MaintenanceForm.find({
       maintenanceCategory,
     }).populate("user maintenanceCategory");
-    console.log(submittedForm);
+
     res.json({ submittedForm });
   } else {
-    const submittedForm = await MaintenanceForm.find({});
+    const submittedForm = await MaintenanceForm.find({}).populate(
+      "user maintenanceCategory"
+    );
     res.json({ submittedForm });
   }
 });
 const getsubmittedFormsByManager = asyncHandler(async (req, res) => {
   const { maintenanceCategory } = req.query;
-  if (maintenanceCategory) {
-    const submittedForm = await MaintenanceForm.find({
-      manager: req.query.manager,
-    }).populate("user maintenanceCategory");
 
-    res.json({ submittedForm });
-  } else {
-    const submittedForm = await MaintenanceForm.find({
-      manager: req.query.manager,
-    }).populate("user maintenanceCategory");
+  const submittedForm = await MaintenanceForm.find({
+    manager: req.query.manager,
+  }).populate("user maintenanceCategory");
 
-    res.json({ submittedForm });
-  }
+  res.json({ submittedForm });
 });
 
 const createManagerReview = asyncHandler(async (req, res) => {

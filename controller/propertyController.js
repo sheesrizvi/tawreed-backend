@@ -175,7 +175,7 @@ const getAllPropertiesManager = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .populate("propertyManager");
-  res.json(sellers);
+  res.json({sellers, pageCount});
 });
 const getAllPropertiesAdmin = asyncHandler(async (req, res) => {
   const sellers = await Properties.find({});
