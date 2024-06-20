@@ -24,7 +24,7 @@ const createBanner = asyncHandler(async (req, res) => {
 
   const s = await Banner.create({
     name,
-    image,
+    img: image,
     product,
     company,
     maintenanceService,
@@ -38,8 +38,6 @@ const createBanner = asyncHandler(async (req, res) => {
   }
 });
 const getBanner = asyncHandler(async (req, res) => {
- 
-
   const s = await Banner.find({});
   if (s) {
     res.json(s);
@@ -115,7 +113,6 @@ const getfeaturedProperties = asyncHandler(async (req, res) => {
       {
         path: "propertyManager",
       },
-      
     ],
   });
   res.json(orderAgain);
@@ -169,5 +166,5 @@ module.exports = {
   createfeaturedProduct,
   createfeaturedProperty,
   getfeaturedProducts,
-  getfeaturedProperties
+  getfeaturedProperties,
 };

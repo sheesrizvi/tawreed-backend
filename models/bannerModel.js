@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
 const imageBannerSchema = mongoose.Schema({
-  image: {
+  img: {
     type: String,
     required: true,
   },
   name: {
     type: String,
-  }, 
+  },
   product: {
     type: String,
   },
