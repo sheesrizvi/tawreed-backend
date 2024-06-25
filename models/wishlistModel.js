@@ -9,24 +9,20 @@ const wishlistSchema = mongoose.Schema(
     },
     items: [
       {
-      
         properties: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.Types.String,
           ref: "Properties",
         },
         ecomproduct: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.Types.String,
           ref: "EcomProduct",
         },
-            
         companies: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.Types.String,
           ref: "Companies",
         },
       },
-
     ],
-    
   },
   {
     timestamps: true,

@@ -190,6 +190,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
+
   res.json(orders);
 });
 const getOrderBySeller = asyncHandler(async (req, res) => {
@@ -310,12 +311,12 @@ const updateOrderDeliveryStatus = asyncHandler(async (req, res) => {
 const getOrders = asyncHandler(async (req, res) => {
   const pageSize = 30;
   const page = Number(req.query.pageNumber) || 1;
-  const count = await Order.countDocuments({  });
+  const count = await Order.countDocuments({});
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
   }
-  const orders = await Order.find({  })
+  const orders = await Order.find({})
     .sort({ createdAt: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1))

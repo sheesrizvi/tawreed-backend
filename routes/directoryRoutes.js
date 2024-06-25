@@ -18,6 +18,7 @@ const {
   updateProfile,
   getProfile,
   searchCompanies,
+  createCompanyReview,
 } = require("../controller/directoryController");
 const router = express.Router();
 
@@ -36,5 +37,6 @@ router.route("/get-my-categories").get(getMyCategory);
 router.route("/del-my-categories").delete(delMyCategory);
 router.route("/update-profile").post(updateProfile);
 router.route("/get-profile").get(getProfile);
+router.route("/create-review").post(createCompanyReview);
 
 module.exports = router;

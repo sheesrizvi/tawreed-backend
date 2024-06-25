@@ -65,7 +65,8 @@ const deleteBanner = asyncHandler(async (req, res) => {
 // wishlist
 const addWishlistItems = asyncHandler(async (req, res) => {
   const { items, user } = req.body;
-  const wishlist = Wishlist.find({ user: user });
+
+  const wishlist = await Wishlist.findOne({ user: user });
   if (wishlist) {
     const olditems = wishlist.items;
     const newitems = olditems.concat(items);
@@ -77,9 +78,19 @@ const addWishlistItems = asyncHandler(async (req, res) => {
       user,
       items,
     });
+
     res.json(wishlist);
   }
 });
+
+const getWishlist = asyncHandler(async (req, res) => {
+  const items = await Wishlist.find({ user: req.query.userId }).populate(
+    "items.ecomproduct items.properties items.companies"
+  );
+
+  res.json(items);
+});
+
 const createfeaturedProduct = asyncHandler(async (req, res) => {
   const { id } = req.body;
 
@@ -167,4 +178,5 @@ module.exports = {
   createfeaturedProperty,
   getfeaturedProducts,
   getfeaturedProperties,
+  getWishlist,
 };

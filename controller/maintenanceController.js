@@ -199,11 +199,18 @@ const getsubmittedForms = asyncHandler(async (req, res) => {
   }
 });
 const getsubmittedFormsByManager = asyncHandler(async (req, res) => {
-  const { maintenanceCategory } = req.query;
-
   const submittedForm = await MaintenanceForm.find({
     manager: req.query.manager,
   }).populate("user maintenanceCategory");
+
+  res.json({ submittedForm });
+});
+const getsubmittedFormsByUser = asyncHandler(async (req, res) => {
+  const submittedForm = await MaintenanceForm.find({
+    user: req.query.userId,
+  })
+    .populate("user maintenanceCategory")
+    .sort({ createdAt: -1 });
 
   res.json({ submittedForm });
 });
@@ -289,4 +296,5 @@ module.exports = {
   getMyCategory,
   delMyCategory,
   getsubmittedFormsByManager,
+  getsubmittedFormsByUser,
 };

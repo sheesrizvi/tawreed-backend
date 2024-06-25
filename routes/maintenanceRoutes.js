@@ -13,6 +13,7 @@ const {
   delMyCategory,
   getMaintenanceByCategory,
   getsubmittedFormsByManager,
+  getsubmittedFormsByUser,
 } = require("../controller/maintenanceController");
 const {
   allMaintenanceManagers,
@@ -29,6 +30,7 @@ router.route("/delete-categories").delete(deleteCategory);
 //form
 router.route("/form").post(submitForm);
 router.route("/get-forms").get(getsubmittedForms);
+router.route("/get-forms-by-user").get(getsubmittedFormsByUser);
 router.route("/get-forms-by-manager").get(getsubmittedFormsByManager);
 
 router.route("/get-all-sellers").get(admin, allMaintenanceManagers);
