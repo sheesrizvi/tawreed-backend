@@ -20,6 +20,10 @@ const propertiesSchema = mongoose.Schema({
     required: true,
     ref: "PropertyManager",
   },
+  area: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Area",
+  },
   image: [
     {
       type: String,

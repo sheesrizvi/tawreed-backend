@@ -8,6 +8,7 @@ const {
 const Wishlist = require("../models/wishlistModel");
 const FeaturedProduct = require("../models/ecom/featuredProduct");
 const FeaturedProperty = require("../models/property/featuredProperty");
+const Area = require("../models/property/areaModel");
 const config = {
   region: process.env.AWS_BUCKET_REGION,
   credentials: {
@@ -59,6 +60,36 @@ const deleteBanner = asyncHandler(async (req, res) => {
   const response = await s3.send(command);
 
   await Banner.deleteOne({ _id: req.query.id });
+  res.json("deleted");
+});
+
+//area
+const createArea = asyncHandler(async (req, res) => {
+  const { name, nameAr } = req.body;
+
+  const area = await Area.create({
+    name,
+    nameAr,
+  });
+  if (area) {
+    res.status(201).json(area);
+  } else {
+    res.status(404);
+    throw new Error("Error");
+  }
+});
+const getAreas = asyncHandler(async (req, res) => {
+  const area = await Area.find({});
+  if (area) {
+    res.json(area);
+  } else {
+    res.status(404);
+    throw new Error("Error");
+  }
+});
+const deleteArea = asyncHandler(async (req, res) => {
+  
+  await Area.deleteOne({ _id: req.query.id });
   res.json("deleted");
 });
 
@@ -179,4 +210,7 @@ module.exports = {
   getfeaturedProducts,
   getfeaturedProperties,
   getWishlist,
+  createArea,
+  getAreas,
+  deleteArea
 };

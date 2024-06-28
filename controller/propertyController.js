@@ -29,6 +29,7 @@ const createProperty = asyncHandler(async (req, res) => {
     size,
     status,
     propertyManager,
+    area
   } = req.body;
 
   const property = Properties.create({
@@ -46,6 +47,7 @@ const createProperty = asyncHandler(async (req, res) => {
     price,
     propertyType,
     bathroom,
+    area,
     rooms,
     size,
     type,
@@ -70,6 +72,7 @@ const updateProperty = asyncHandler(async (req, res) => {
     location,
     details,
     price,
+    area,
     type,
     status,
     id,
@@ -80,6 +83,7 @@ const updateProperty = asyncHandler(async (req, res) => {
     property.name = name;
     property.description = description;
     property.nameAr = nameAr;
+    property.area = area;
     property.descriptionAr = descriptionAr;
     property.image = image ? image : property.image;
     property.status = status;
@@ -118,7 +122,7 @@ const deleteProperty = asyncHandler(async (req, res) => {
 });
 
 const getAllProperties = asyncHandler(async (req, res) => {
-  const { type, status, propertyType, price, min, max } = req.query;
+  const { type, status, area, propertyType, price, min, max } = req.query;
 
   const minprice = price ? min : 0;
   const maxprice = price ? max : 250000000;
@@ -126,6 +130,7 @@ const getAllProperties = asyncHandler(async (req, res) => {
     type,
     status,
     propertyType,
+    area
   };
   const asArray = Object.entries(filter);
   const filtered = asArray.filter(([key, value]) => value);
@@ -155,7 +160,7 @@ const getAllProperties = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
-    .populate("propertyManager");
+    .populate("propertyManager area");
 
   res.json({ products, pageCount });
 });
@@ -174,7 +179,7 @@ const getAllPropertiesManager = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
-    .populate("propertyManager");
+    .populate("propertyManager area");
   res.json({sellers, pageCount});
 });
 const getAllPropertiesAdmin = asyncHandler(async (req, res) => {
@@ -183,12 +188,13 @@ const getAllPropertiesAdmin = asyncHandler(async (req, res) => {
 });
 
 const getActiveProperties = asyncHandler(async (req, res) => {
-  const { type, status, propertyType, price, min, max } = req.query;
+  const { type, status,area, propertyType, price, min, max } = req.query;
   const minprice = price ? min : 0;
   const maxprice = price ? max : 2500000;
   const filter = {
     type,
     status,
+    area,
     propertyType,
     minprice,
     maxprice,
@@ -220,14 +226,14 @@ const getActiveProperties = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
-    .populate("propertyManager");
+    .populate("propertyManager area");
 
   res.json({ products, pageCount });
 });
 
 const getPropertyById = asyncHandler(async (req, res) => {
   const product = await Properties.findById(req.query.propertyId).populate(
-    "propertyManager"
+    "propertyManager area"
   );
   if (product) {
     res.json(product);

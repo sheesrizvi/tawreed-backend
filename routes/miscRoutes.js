@@ -14,6 +14,9 @@ const {
   addWishlistItems,
   deleteWishlistItems,
   getWishlist,
+  createArea,
+  getAreas,
+  deleteArea,
 } = require("../controller/miscController");
 const router = express.Router();
 
@@ -23,6 +26,9 @@ router.route("/wishlist/delete").delete(deleteWishlistItems);
 router.route("/banner").post(createBanner);
 router.route("/banner").get(getBanner);
 router.route("/banner").delete(deleteBanner);
+router.route("/area").post(createArea);
+router.route("/area").get(getAreas);
+router.route("/area").delete(deleteArea);
 router.route("/property/delete").delete(deletefeaturedProperty);
 router.route("/product/delete").delete(deletefeaturedProduct);
 router.route("/property/create").post(createfeaturedProperty);
