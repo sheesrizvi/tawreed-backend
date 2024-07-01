@@ -88,7 +88,6 @@ const getAreas = asyncHandler(async (req, res) => {
   }
 });
 const deleteArea = asyncHandler(async (req, res) => {
-  
   await Area.deleteOne({ _id: req.query.id });
   res.json("deleted");
 });
@@ -212,5 +211,5 @@ module.exports = {
   getWishlist,
   createArea,
   getAreas,
-  deleteArea
+  deleteArea,
 };
