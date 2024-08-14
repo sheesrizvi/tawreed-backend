@@ -270,6 +270,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
     ratings,
     min,
     max,
+    mindiscount,
   } = req.query;
 
   const minprice = min ? min : 0;
@@ -291,6 +292,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
       justStrings,
       { price: { $gte: minprice } },
       { price: { $lte: maxprice } },
+      { discount: { $gte: mindiscount } },
     ],
   });
 
@@ -303,6 +305,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
       justStrings,
       { price: { $gte: minprice } },
       { price: { $lte: maxprice } },
+      { discount: { $gte: mindiscount } },
     ],
   })
     .limit(pageSize)

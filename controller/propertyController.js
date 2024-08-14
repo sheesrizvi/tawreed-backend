@@ -122,10 +122,11 @@ const deleteProperty = asyncHandler(async (req, res) => {
 });
 
 const getAllProperties = asyncHandler(async (req, res) => {
-  const { type, status, area, propertyType, price, min, max } = req.query;
+  const { type, status, area, propertyType, min, max } = req.query;
 
-  const minprice = min ? min : 0;
-  const maxprice = max ? max : 250000000;
+  const minprice = min ? Number(min) : Number(0);
+  const maxprice = max ? Number(max) : Number(250000000);
+
   const filter = {
     type,
     status,
@@ -141,8 +142,8 @@ const getAllProperties = asyncHandler(async (req, res) => {
   const count = await Properties.countDocuments({
     $and: [
       justStrings,
-      { price: { $gte: Number(minprice) } },
-      { price: { $lte: Number(maxprice) } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   });
 
@@ -153,15 +154,15 @@ const getAllProperties = asyncHandler(async (req, res) => {
   const products = await Properties.find({
     $and: [
       justStrings,
-      { price: { $gte: Number(minprice) } },
-      { price: { $lte: Number(maxprice) } },
+      { price: { $gte: minprice } },
+      { price: { $lte: maxprice } },
     ],
   })
     .limit(pageSize)
     .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .populate("propertyManager area");
-  console.log(products);
+
   res.json({ products, pageCount });
 });
 
