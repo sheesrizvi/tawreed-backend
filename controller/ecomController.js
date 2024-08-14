@@ -275,6 +275,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
 
   const minprice = min ? min : 0;
   const maxprice = max ? max : 250000000;
+  const mindiscountprice = mindiscount ? mindiscount : 0;
   const filter = {
     ecomCategory,
     ecomBrand,
@@ -292,7 +293,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
       justStrings,
       { price: { $gte: minprice } },
       { price: { $lte: maxprice } },
-      { discount: { $gte: mindiscount } },
+      { discount: { $gte: mindiscountprice } },
     ],
   });
 
@@ -305,7 +306,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
       justStrings,
       { price: { $gte: minprice } },
       { price: { $lte: maxprice } },
-      { discount: { $gte: mindiscount } },
+      { discount: { $gte: mindiscountprice } },
     ],
   })
     .limit(pageSize)
