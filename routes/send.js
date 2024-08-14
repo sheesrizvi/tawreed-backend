@@ -135,50 +135,6 @@ router.post("/send-notification-all", async (req, res) => {
       throw new Error("Error");
     }
   };
-  // let payload = {
-  //   notification: {
-  //     title: title,
-  //     body: body,
-  //     icon: 'https://d1.awsstatic.com/awselemental/Images/link_front_v2.dbbc649d3acf98e837af3c3fc71105e54bc901f1.png'
-  //   },
-  //   apns: {
-  //     payload: {
-  //       aps: {
-  //         'mutable-content': 1, // 1 or true
-  //       },
-  //     },
-  //     fcm_options: {
-  //       image: 'image-url',
-  //     },
-  //   },
-  //   // apns: {
-  //   //   payload: {
-  //   //     aps: {
-  //   //       'mutable-content': 1,
-  //   //     },
-  //   //   },
-  //   //   fcm_options: {
-  //   //     image: 'image-url',
-  //   //   },
-  //   // },
-  // };
-
-  // const options = {
-  //   priority: "high",
-  //   timeToLive: 60 * 60 * 24,
-  // };
-
-  // admin
-  //   .messaging()
-  //   .sendToDevice(registrationToken, payload, options)
-  //   .then(function (response) {
-  //     console.log(response)
-  //     res.status(201).send(response);
-  //   })
-  //   .catch(function (error) {
-  //     res.status(404);
-  //     throw new Error(error);
-  //   });
 
   const message = {
     notification: {

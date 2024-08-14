@@ -272,8 +272,8 @@ const getAllProduct = asyncHandler(async (req, res) => {
     max,
   } = req.query;
 
-  const minprice = price ? min : 0;
-  const maxprice = price ? max : 250000000;
+  const minprice = min ? min : 0;
+  const maxprice = max ? max : 250000000;
   const filter = {
     ecomCategory,
     ecomBrand,
