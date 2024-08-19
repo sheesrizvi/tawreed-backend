@@ -98,10 +98,12 @@ const addWishlistItems = asyncHandler(async (req, res) => {
 
   const wishlist = await Wishlist.findOne({ user: user });
   if (wishlist) {
-    const olditems = wishlist.items;
+    let olditems = wishlist.items;
+
     const newitems = olditems.concat(items);
     wishlist.items = newitems;
     const updatedWishlist = await wishlist.save();
+
     res.json(updatedWishlist);
   } else {
     const wishlist = await Wishlist.create({
@@ -185,11 +187,32 @@ const deletefeaturedProperty = asyncHandler(async (req, res) => {
 });
 
 const deleteWishlistItems = asyncHandler(async (req, res) => {
-  const { items, user } = req.body;
-  const wishlist = await Wishlist.find({ user: user });
+  const { items, user } = req.query;
+  const item = items[0]
+  const wishlist = await Wishlist.findOne({ user: user });
+
+
   if (wishlist) {
-    wishlist.items = wishlist.items.filter((i) => !items.includes(i));
-    res.json({ message: "Item removed" });
+    if (item.ecomproduct) {
+      wishlist.items = wishlist.items.filter((i) => i.ecomproduct !== item.ecomproduct);
+
+      await wishlist.save()
+
+      res.json({ message: "Item removed" });
+    } else if (item.properties) {
+      wishlist.items = wishlist.items.filter((i) => i.properties !== item.properties);
+
+      await wishlist.save()
+
+      res.json({ message: "Item removed" });
+    } else if (item.companies) {
+      wishlist.items = wishlist.items.filter((i) => i.companies !== item.companies);
+
+      await wishlist.save()
+
+      res.json({ message: "Item removed" });
+    }
+
   } else {
     res.status(404);
     throw new Error("wishlist not found");

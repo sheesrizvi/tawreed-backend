@@ -175,8 +175,9 @@ const createProduct = asyncHandler(async (req, res) => {
     active,
   } = req.body;
 
+
   const ecomProduct = EcomProduct.create({
-    _id: sku,
+    _id: sku + seller,
     name,
     seller,
     description,

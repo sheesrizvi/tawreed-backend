@@ -124,7 +124,7 @@ const registerUser = asyncHandler(async (req, res) => {
 //@access   Private
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.query.id);
 
   if (user) {
     res.json(user);
