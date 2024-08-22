@@ -16,50 +16,7 @@ router.post("/send-notification", async (req, res) => {
   user.push(id);
 
   const registrationToken = token;
-  // let payload = {
-  //   notification: {
-  //     title: title,
-  //     body: body,
-  //     icon: 'https://d1.awsstatic.com/awselemental/Images/link_front_v2.dbbc649d3acf98e837af3c3fc71105e54bc901f1.png'
-  //   },
-  //   apns: {
-  //     payload: {
-  //       aps: {
-  //         'mutable-content': 1, // 1 or true
-  //       },
-  //     },
-  //     fcm_options: {
-  //       image: 'image-url',
-  //     },
-  //   },
-  //   // apns: {
-  //   //   payload: {
-  //   //     aps: {
-  //   //       'mutable-content': 1,
-  //   //     },
-  //   //   },
-  //   //   fcm_options: {
-  //   //     image: 'image-url',
-  //   //   },
-  //   // },
-  // };
 
-  // const options = {
-  //   priority: "high",
-  //   timeToLive: 60 * 60 * 24,
-  // };
-
-  // admin
-  //   .messaging()
-  //   .sendToDevice(registrationToken, payload, options)
-  //   .then(function (response) {
-  //     console.log(response)
-  //     res.status(201).send(response);
-  //   })
-  //   .catch(function (error) {
-  //     res.status(404);
-  //     throw new Error(error);
-  //   });
 
   const message = {
     notification: {
@@ -183,6 +140,7 @@ router.get("/get-all", async (req, res) => {
     throw new Error("Error");
   }
 });
+
 router.get("/get-byuser", async (req, res) => {
   const notifications = await Notification.find({
     users: { $in: [req.query.userId] },
@@ -193,6 +151,14 @@ router.get("/get-byuser", async (req, res) => {
     res.status(404);
     throw new Error("Error");
   }
+});
+
+router.delete("/delete-byuser", async (req, res) => {
+  const { id, user } = req.query;
+
+  const notifications = await Notification.updateOne({ _id: id }, { $pull: { users: user } });
+
+
 });
 
 module.exports = router;

@@ -23,7 +23,6 @@ const s3 = new S3Client(config);
 const upload = multer({
   storage: multerS3({
     s3,
-
     bucket: process.env.AWS_BUCKET,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
@@ -31,6 +30,7 @@ const upload = multer({
       cb(null, `${fileName}${path.extname(file.originalname)}`);
     },
   }),
+  limits: { fieldSize: 2 * 1024 * 1024 }
 });
 
 router.post("/uploadMultiple", upload.array("image", 150), async (req, res) => {
