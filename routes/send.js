@@ -158,7 +158,7 @@ router.delete("/delete-byuser", async (req, res) => {
 
   const notifications = await Notification.updateOne({ _id: id }, { $pull: { users: user } });
 
-
+  res.json('success')
 });
 
 module.exports = router;
