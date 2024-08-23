@@ -7,7 +7,7 @@ const VendorEcom = require("../models/ecom/vendorEcomModel");
 const Companies = require("../models/directory/companiesModel");
 
 router.post("/register-token-user", async (req, res) => {
-  // const User = req.body.user;
+
 
   const user = await User.findById(req.body.user._id);
 
@@ -17,6 +17,17 @@ router.post("/register-token-user", async (req, res) => {
   const updatedUser = await user.save();
   res.status(201).send();
 });
+
+
+router.post("/delete-token-user", async (req, res) => {
+
+
+  const user = await User.findOneAndUpdate({ _id: req.body.user.id }, { pushToken: '' });
+
+  res.json('success')
+});
+
+
 router.post("/register-token-property", async (req, res) => {
   // const User = req.body.user;
 

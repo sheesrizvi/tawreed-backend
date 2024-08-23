@@ -12,6 +12,7 @@ admin.initializeApp({
 
 router.post("/send-notification", async (req, res) => {
   const { token, title, body, image, id } = req.body;
+
   let user = [];
   user.push(id);
 
@@ -46,6 +47,7 @@ router.post("/send-notification", async (req, res) => {
       title,
       description: body,
       users: user,
+      image
     });
     if (notification) {
       console.log("success");
@@ -83,7 +85,7 @@ router.post("/send-notification-all", async (req, res) => {
     const notification = await Notification.create({
       title,
       description: body,
-      users,
+      users, image
     });
     if (notification) {
       console.log("success");
