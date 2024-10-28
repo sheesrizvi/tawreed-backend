@@ -252,6 +252,9 @@ const updateProfile = asyncHandler(async (req, res) => {
     addressAr,
     descriptionAr,
     detailsAr,
+    name,
+    nameAr,
+    email
   } = req.body;
 
   const manager = await Companies.findById(id);
@@ -265,6 +268,9 @@ const updateProfile = asyncHandler(async (req, res) => {
     manager.details = details;
     manager.detailsAr = detailsAr;
     manager.image = image;
+    manager.name = name
+    manager.nameAr = nameAr
+    manager.email = email
     const updatedCategory = await manager.save();
 
     res.status(201).json(updatedCategory);

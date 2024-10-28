@@ -169,7 +169,10 @@ const submitForm = asyncHandler(async (req, res) => {
 
   const submittedForm = await MaintenanceForm.create({
     user,
-    location,
+    location: {
+      type: "Point",
+      coordinates: [location.longitude, location.latitude]
+    },
     dateTime,
     image,
     manager,
@@ -188,20 +191,20 @@ const getsubmittedForms = asyncHandler(async (req, res) => {
   if (maintenanceCategory) {
     const submittedForm = await MaintenanceForm.find({
       maintenanceCategory,
-    }).populate("user maintenanceCategory");
+    }).populate("user maintenanceCategory").sort({createdAt: -1});
 
     res.json({ submittedForm });
   } else {
     const submittedForm = await MaintenanceForm.find({}).populate(
       "user maintenanceCategory"
-    );
+    ).sort({createdAt: -1});
     res.json({ submittedForm });
   }
 });
 const getsubmittedFormsByManager = asyncHandler(async (req, res) => {
   const submittedForm = await MaintenanceForm.find({
     manager: req.query.manager,
-  }).populate("user maintenanceCategory");
+  }).populate("user maintenanceCategory").sort({createdAt: -1});
 
   res.json({ submittedForm });
 });

@@ -9,8 +9,9 @@ const propertyRoutes = require("./routes/propertyRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const upload = require("./routes/upload");
 const userRoutes = require("./routes/userRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes")
 const misc = require("./routes/miscRoutes");
-const send = require("./routes/send");
+// const send = require("./routes/send");
 const rnPushTokens = require("./routes/rnPushTokens");
 const cors = require("cors");
 
@@ -25,6 +26,7 @@ app.use(
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/dashboard", dashboardRoutes)
 app.use("/api/upload", upload);
 app.use("/api/ecom", ecomRoutes);
 app.use("/api/maintenance", maintenanceRoutes);
@@ -32,7 +34,8 @@ app.use("/api/property", propertyRoutes);
 app.use("/api/directory", directoryRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/misc", misc);
-app.use("/api/send", send);
+
+// app.use("/api/send", send);
 app.use("/api/rnPushTokens", rnPushTokens);
 
 mongoose

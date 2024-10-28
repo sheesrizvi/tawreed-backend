@@ -6,6 +6,7 @@ const {
   allCompanies,
   company,
   deletecompany,
+  adminDashboard
 } = require("../controller/adminController");
 const {
   createCategory,
@@ -38,5 +39,6 @@ router.route("/del-my-categories").delete(delMyCategory);
 router.route("/update-profile").post(updateProfile);
 router.route("/get-profile").get(getProfile);
 router.route("/create-review").post(createCompanyReview);
+router.route("/admin-dashboard").get(adminDashboard)
 
 module.exports = router;

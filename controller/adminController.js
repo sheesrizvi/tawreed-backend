@@ -15,9 +15,9 @@ const Companies = require("../models/directory/companiesModel.js");
 
 const authAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(email, password)
   const admin = await Admin.findOne({ email });
-
+  console.log(admin)
   if (admin && (await admin.matchPassword(password))) {
     res.json({
       _id: admin._id,
@@ -172,6 +172,20 @@ const deletecompany = asyncHandler(async (req, res) => {
   res.json("deleted");
 });
 
+const adminDashboard = asyncHandler(async (req, res) => {
+  const companiesCount = await Companies.countDocuments({})
+  const ecommerceVendorCount = await VendorEcom.countDocuments({})
+  const maintenanceVendorCount = await MaintenanceManager.countDocuments({})
+  const propertyVendorCount = await PropertyManager.countDocuments({})
+  res.status(200).json({
+      companiesCount,
+      ecommerceVendorCount,
+      maintenanceVendorCount,
+      propertyVendorCount
+  })
+})
+
+
 module.exports = {
   allEcomSellers,
   authAdmin,
@@ -187,4 +201,5 @@ module.exports = {
   company,
   deletecompany,
   allCompanies,
+  adminDashboard
 };
