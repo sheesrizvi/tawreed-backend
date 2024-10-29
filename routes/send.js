@@ -144,6 +144,7 @@ router.get("/get-all", async (req, res) => {
 });
 
 router.get("/get-byuser", async (req, res) => {
+
   const notifications = await Notification.find({
     users: { $in: [req.query.userId] },
   });
