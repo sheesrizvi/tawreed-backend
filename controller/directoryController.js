@@ -202,11 +202,13 @@ const createCompanyReview = asyncHandler(async (req, res) => {
 
 const setMyCategory = asyncHandler(async (req, res) => {
   const { id, category } = req.body;
-
   const manager = await Companies.findById(id);
+
   if (manager) {
     manager.companyCategory = category;
+
     const updatedCategory = await manager.save();
+    console.log(updatedCategory)
     res.status(201).json(updatedCategory);
   } else {
     res.json("Not Found");

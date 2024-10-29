@@ -154,18 +154,28 @@ const addOrderItems = asyncHandler(async (req, res) => {
 });
 
 const getOrderById = asyncHandler(async (req, res) => {
+  
   const order = await Order.findById(req.params.id).populate(
     "user",
     "name email"
   );
 
   if (order) {
+    console.log(order)
     res.json(order);
   } else {
     res.status(404);
     throw new Error("Order not found");
   }
 });
+
+const deleteOrder = asyncHandler(async (req, res) => {
+  const { id } = req.query
+  console.log(id)
+  if(!id) return res.status(400).send({ message: 'Order Id not found ' })
+  const order = await Order.findByIdAndDelete(id)
+  res.status(200).send({message: 'Order Deleted'})
+})
 
 const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.body.id);
@@ -194,8 +204,10 @@ const getMyOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 const getOrderBySeller = asyncHandler(async (req, res) => {
+
   const pageSize = 30;
   const page = Number(req.query.pageNumber) || 1;
+  console.log(req.query.sellerId)
   const count = await Order.countDocuments({
     "orderItems.seller": req.query.sellerId,
   });
@@ -204,7 +216,7 @@ const getOrderBySeller = asyncHandler(async (req, res) => {
     pageCount = pageCount + 1;
   }
 
-  const orders = await Order.find({ "orderItems.seller": req.query.sellerId })
+  const orders = await Order.find({ "orderItems.seller": req.query.sellerId }).populate("user", "id name")
     .sort({ createdAt: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
@@ -309,6 +321,7 @@ const updateOrderDeliveryStatus = asyncHandler(async (req, res) => {
 });
 
 const getOrders = asyncHandler(async (req, res) => {
+
   const pageSize = 30;
   const page = Number(req.query.pageNumber) || 1;
   const count = await Order.countDocuments({});
@@ -363,6 +376,7 @@ module.exports = {
   updateOrderDeliveryStatus,
   getMyOrders,
   getOrders,
+  deleteOrder,
   getPendingOrders,
   getSalesDateRange,
   updateOrderToUnPaid,

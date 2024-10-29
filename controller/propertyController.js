@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { DeleteObjectCommand, S3Client } = require("@aws-sdk/client-s3");
 const Properties = require("../models/property/propertiesModel");
+const FeaturedProperty = require("../models/property/featuredProperty");
 
 const config = {
   region: process.env.AWS_BUCKET_REGION,
@@ -103,10 +104,15 @@ const updateProperty = asyncHandler(async (req, res) => {
 });
 const deleteProperty = asyncHandler(async (req, res) => {
   const subid = req.query.id;
+  if(!subid) return res.status(400).send({message: 'property id needed for delete'})
   const sub = await Properties.findById(subid);
-
+  if(!sub) return res.status(400).send({message: 'property not found'})
+  const featuredProperty = await FeaturedProperty.findOne({property: subid})
+  if(featuredProperty) {
+    await FeaturedProperty.findOneAndDelete({property: subid})
+  }
   const f1 = sub.image;
-
+  
   f1.map(async (file) => {
     const fileName = file.split("//")[1].split("/")[1];
 

@@ -8,6 +8,9 @@ const EcomCategory = require("../models/ecom/categoryEcomModel");
 
 const EcomProduct = require("../models/ecom/ecomProductModel");
 const EcomBrand = require("../models/ecom/ecomBrandModel");
+const FeaturedProduct = require("../models/ecom/featuredProduct");
+
+
 
 const config = {
   region: process.env.AWS_BUCKET_REGION,
@@ -245,8 +248,13 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 const deleteProduct = asyncHandler(async (req, res) => {
   const subid = req.query.id;
+  if(!subid) return res.status(400).send({message: 'product id needed for delete'})
   const sub = await EcomProduct.findById(subid);
-
+  if(!sub) return res.status(400).send({message: 'product not found'})
+  const featuredProduct = await FeaturedProduct.findOne({product: subid})
+  if(featuredProduct) {
+    await FeaturedProduct.findOneAndDelete({product: subid})
+  }
   const f1 = sub.image;
   f1.map(async (file) => {
     const fileName = file.split("//")[1].split("/")[1];
