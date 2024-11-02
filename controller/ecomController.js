@@ -43,6 +43,7 @@ const createCategory = asyncHandler(async (req, res) => {
 const updateCategory = asyncHandler(async (req, res) => {
   const { id, name, description, image, active, nameAr, descriptionAr } =
     req.body;
+  console.log(name)
   const ecomCategory = await EcomCategory.findById(id);
   if (ecomCategory) {
     ecomCategory.name = name;
@@ -52,7 +53,6 @@ const updateCategory = asyncHandler(async (req, res) => {
     ecomCategory.image = image ? image : ecomCategory.image;
     ecomCategory.active = ecomCategory.active;
     const updatedCategory = await ecomCategory.save();
-
     res.json(updatedCategory);
   } else {
     res.status(404);
@@ -97,6 +97,7 @@ const createBrand = asyncHandler(async (req, res) => {
   }
 });
 const updateBrand = asyncHandler(async (req, res) => {
+  console.log('update')
   const { id, name, description, image, active, nameAr, descriptionAr } =
     req.body;
   const ecomCategory = await EcomBrand.findById(id);
@@ -138,10 +139,33 @@ const getAllCategory = asyncHandler(async (req, res) => {
   const categories = await EcomCategory.find({});
   res.json(categories);
 });
+
+const getAllCategoryWithPagination = asyncHandler(async (req, res) => {
+  const pageNumber = req.query.pageNumber || 1
+  const pageSize = req.query.pageSize || 20
+
+  const totalDocuments = await EcomCategory.countDocuments({})
+  const pageCount = Math.ceil(totalDocuments/pageSize)
+
+  const categories = await EcomCategory.find({}).skip((pageNumber - 1) * pageSize).limit(pageSize);
+  res.json({categories, pageCount});
+});
+
 const getAllBrands = asyncHandler(async (req, res) => {
   const categories = await EcomBrand.find({});
   res.json(categories);
 });
+
+const getAllBrandsWithPagination = asyncHandler(async (req, res) => {
+  const pageNumber = req.query.pageNumber || 1
+  const pageSize = req.query.pageSize || 20
+
+  const totalDocuments = await EcomBrand.countDocuments({})
+  const pageCount = Math.ceil(totalDocuments/pageSize)
+  const categories = await EcomBrand.find({}).skip((pageNumber - 1) * pageSize).limit(pageSize);
+  res.json({categories, pageCount});
+});
+
 const getActiveCategory = asyncHandler(async (req, res) => {
   const categories = await EcomCategory.find({ active: true });
   res.json(categories);
@@ -498,11 +522,13 @@ module.exports = {
   getActiveProduct,
   activateDeactivateCategory,
   activateDeactivateProduct,
+  getAllCategoryWithPagination,
   createProductReview,
   getProductById,
   searchProducts,
   createBrand,
   getAllBrands,
+  getAllBrandsWithPagination,
   updateBrand,
   deleteBrand,
 };

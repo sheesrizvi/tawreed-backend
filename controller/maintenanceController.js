@@ -75,6 +75,16 @@ const getAllCategory = asyncHandler(async (req, res) => {
   const categories = await MaintenanceCategory.find({});
   res.json(categories);
 });
+
+const getAllCategoryWithPagination = asyncHandler(async (req, res) => {
+  const pageNumber = req.query.pageNumber || 1
+  const pageSize = req.query.pageSize || 20
+  const totalDocuments = await MaintenanceCategory.countDocuments({})
+  const pageCount = Math.ceil(totalDocuments/pageSize)
+  const categories = await MaintenanceCategory.find({}).skip((pageNumber - 1) * pageSize).limit(pageSize)
+  res.json({categories, pageCount});
+});
+
 const getActiveCategory = asyncHandler(async (req, res) => {
   const categories = await MaintenanceCategory.find({ active: true });
   res.json(categories);
@@ -202,11 +212,19 @@ const getsubmittedForms = asyncHandler(async (req, res) => {
   }
 });
 const getsubmittedFormsByManager = asyncHandler(async (req, res) => {
+  const pageNumber = req.query.pageNumber || 1
+  const pageSize = 30
+
+  const totalDocuments = await MaintenanceForm.countDocuments({
+    manager: req.query.manager
+  })
+  const pageCount = Math.ceil(totalDocuments/pageSize)
+  console.log(pageCount)
   const submittedForm = await MaintenanceForm.find({
     manager: req.query.manager,
-  }).populate("user maintenanceCategory").sort({createdAt: -1});
+  }).populate("user maintenanceCategory").sort({createdAt: -1}).skip((pageSize) * pageNumber - 1).limit(pageSize);
 
-  res.json({ submittedForm });
+  res.json({ submittedForm, pageCount });
 });
 const getsubmittedFormsByUser = asyncHandler(async (req, res) => {
   const submittedForm = await MaintenanceForm.find({
@@ -300,4 +318,5 @@ module.exports = {
   delMyCategory,
   getsubmittedFormsByManager,
   getsubmittedFormsByUser,
+  getAllCategoryWithPagination
 };

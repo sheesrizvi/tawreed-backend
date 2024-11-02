@@ -30,7 +30,7 @@ const createProperty = asyncHandler(async (req, res) => {
     size,
     status,
     propertyManager,
-    area,
+    area
   } = req.body;
 
   const property = Properties.create({
@@ -53,7 +53,7 @@ const createProperty = asyncHandler(async (req, res) => {
     size,
     type,
     status,
-    propertyManager,
+    propertyManager
   });
   if (property) {
     res.status(201).json(property);
@@ -76,10 +76,11 @@ const updateProperty = asyncHandler(async (req, res) => {
     area,
     type,
     status,
-    id,
+    id
   } = req.body;
 
   const property = await Properties.findById(id);
+  console.log(location)
   if (property) {
     property.name = name;
     property.description = description;
@@ -92,7 +93,10 @@ const updateProperty = asyncHandler(async (req, res) => {
     property.details = details;
     property.detailsAr = detailsAr;
     property.price = price;
-    property.location = location ? location : property.location;
+    property.location = location ? {
+      type: "Point",
+      coordinates: [location.longitude, location.latitude],
+    } : property.location;
 
     const updatedProperty = await property.save();
 

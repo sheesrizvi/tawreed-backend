@@ -11,6 +11,7 @@ const {
   authCompany,
   approveSeller,
   unapprovedSeller,
+  deleteSeller,
 
 } = require("../controller/sellerController");
 const { admin } = require("../middleware/authmiddleware");
@@ -37,6 +38,7 @@ router.route("/property-login").post(authPropertyManager);
 router.route("/maintenance-register").post(registerMaintenanceManager);
 router.route("/maintenance-login").post(authMaintenanceManager);
 router.route("/approve-seller").post(admin, approveSeller);
+router.route("/delete-seller").delete(admin, deleteSeller);
 router.route("/unapproved-seller").get(admin, unapprovedSeller);
 
 

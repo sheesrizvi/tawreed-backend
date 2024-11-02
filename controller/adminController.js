@@ -36,7 +36,7 @@ const authAdmin = asyncHandler(async (req, res) => {
 //@access   Public
 
 const registerAdmin = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, nameAr } = req.body;
 
   const userExists = await Admin.findOne({ email });
 
@@ -48,7 +48,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
   const admin = await Admin.create({
     name,
     email,
-    password,
+    password
   });
 
   if (admin) {
@@ -92,12 +92,12 @@ const propertyManagers = asyncHandler(async (req, res) => {
   const page = Number(req.query.pageNumber) || 1;
   const pageSize = 30;
   const count = await PropertyManager.countDocuments({
-    active: true,
+    // active: true
   });
-  var pageCount = Math.floor(count / 30);
-  if (count % 30 !== 0) {
-    pageCount = pageCount + 1;
-  }
+
+  const pageCount = Math.ceil(count/pageSize)
+
+  console.log("pageCount", pageCount)
   const sellers = await PropertyManager.find({}, "_id name")
     .limit(pageSize)
     .sort({ createdAt: -1 })
@@ -119,7 +119,7 @@ const maintenanceManagers = asyncHandler(async (req, res) => {
   const page = Number(req.query.pageNumber) || 1;
   const pageSize = 30;
   const count = await MaintenanceManager.countDocuments({
-    active: true,
+    // active: true,
   });
   var pageCount = Math.floor(count / 30);
   if (count % 30 !== 0) {
@@ -146,17 +146,18 @@ const company = asyncHandler(async (req, res) => {
   const page = Number(req.query.pageNumber) || 1;
   const pageSize = 30;
   const count = await Companies.countDocuments({
-    active: true,
+    // active: true,
   });
+  console.log("company count", count)
   var pageCount = Math.floor(count / 30);
   console.log(pageCount);
   if (count % 30 !== 0) {
     pageCount = pageCount + 1;
   }
   const sellers = await Companies.find({})
-    .limit(pageSize)
     .sort({ createdAt: -1 })
-    .skip(pageSize * (page - 1));
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
 
   res.json({ sellers, pageCount });
 });

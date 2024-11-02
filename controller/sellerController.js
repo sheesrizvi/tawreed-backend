@@ -405,13 +405,60 @@ const approveSeller = asyncHandler(async (req, res) => {
   }
 });
 const unapprovedSeller = asyncHandler(async (req, res) => {
+  const pageNumber = req.query.pageNumber || 1
+  const pageSize = req.query.pageSize || 20
   const ecom = await VendorEcom.find({ registered: false });
   const company = await Companies.find({ registered: false });
   const maintenance = await MaintenanceManager.find({ registered: false });
   const property = await PropertyManager.find({ registered: false });
   const unapproved = ecom.concat(company, maintenance, property);
-  res.json(unapproved);
+  const totalDocuments = unapproved.length || []
+  const pageCount = Math.ceil(totalDocuments/pageSize)
+  const startIndex = (pageNumber - 1) * pageSize;
+  const paginatedResults = unapproved.slice(startIndex, startIndex + pageSize);
+  res.json({unapproved: paginatedResults, pageCount});
 });
+
+const deleteSeller = asyncHandler(async (req, res) => {
+  const { id, sellerType } = req.query;
+  console.log('sellerType', sellerType, id)
+  let seller;
+  switch (sellerType) {
+    case "ecom":
+      seller = await VendorEcom.findById(id);
+      if(seller) {
+        await VendorEcom.findByIdAndDelete(id)
+        return res.status(200).send({message: 'Deleted'})
+      }
+      break;
+    case "company":
+      seller = await Companies.findById(id);
+      if (seller) {
+        await Companies.findByIdAndDelete(id)
+        return res.status(200).send({message: 'Deleted'})
+      }
+      break;
+    case "maintenance":
+      seller = await MaintenanceManager.findById(id);
+      if (seller) {
+        await MaintenanceManager.findByIdAndDelete(id)
+        return res.status(200).send({message: 'Deleted'})
+      }
+      break;
+    case "property":
+      seller = await PropertyManager.findById(id);
+      if (seller) {
+        await PropertyManager.findByIdAndDelete(id)
+        return res.status(200).send({message: 'Deleted'})
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  return res.status(400).send({ message: 'Not a valid request to delete'})
+})
 
 module.exports = {
   registerEcomVendor,
@@ -424,4 +471,5 @@ module.exports = {
   authCompany,
   approveSeller,
   unapprovedSeller,
+  deleteSeller
 };

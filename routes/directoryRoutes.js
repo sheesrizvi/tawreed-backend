@@ -20,12 +20,16 @@ const {
   getProfile,
   searchCompanies,
   createCompanyReview,
+  updateCategory,
+  getAllCategoryWithPagination,
 } = require("../controller/directoryController");
 const router = express.Router();
 
 //admin
 router.route("/category").post(createCategory);
+router.route("/category/update").post(updateCategory);
 router.route("/get-categories").get(getAllCategory);
+router.route("/get-categories-with-pagination").get(getAllCategoryWithPagination);
 router.route("/delete-categories").delete(deleteCategory);
 
 router.route("/get-all-sellers").get(allCompanies);

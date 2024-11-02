@@ -74,6 +74,17 @@ const getAllCategory = asyncHandler(async (req, res) => {
   const categories = await CompanyCategory.find({});
   res.json(categories);
 });
+
+const getAllCategoryWithPagination = asyncHandler(async (req, res) => {
+  const pageNumber = req.query.pageNumber || 1
+  const pageSize = req.query.pageSize || 20
+
+  const totalDocuments = await CompanyCategory.countDocuments({})
+  const pageCount = Math.ceil(totalDocuments/pageSize)
+  const categories = await CompanyCategory.find({}).skip(pageSize * (pageNumber -1)).limit(pageSize);
+  res.json({categories, pageCount});
+});
+
 const getActiveCategory = asyncHandler(async (req, res) => {
   const categories = await CompanyCategory.find({ active: true });
   res.json(categories);
@@ -303,4 +314,5 @@ module.exports = {
   delMyCategory,
   updateProfile,
   getProfile,
+  getAllCategoryWithPagination
 };
