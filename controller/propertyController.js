@@ -80,7 +80,7 @@ const updateProperty = asyncHandler(async (req, res) => {
   } = req.body;
 
   const property = await Properties.findById(id);
-  console.log(location)
+
   if (property) {
     property.name = name;
     property.description = description;

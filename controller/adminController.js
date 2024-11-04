@@ -15,9 +15,7 @@ const Companies = require("../models/directory/companiesModel.js");
 
 const authAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password)
   const admin = await Admin.findOne({ email });
-  console.log(admin)
   if (admin && (await admin.matchPassword(password))) {
     res.json({
       _id: admin._id,
