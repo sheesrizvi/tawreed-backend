@@ -23,6 +23,7 @@ const propertiesSchema = mongoose.Schema({
   area: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Area",
+    required: true
   },
   image: [
     {
@@ -42,7 +43,7 @@ const propertiesSchema = mongoose.Schema({
   },
   propertyType: {
     type: String,
-    enum: ["House", "Apartment", "Villa", "Office", "Commercial Building"],
+    enum: ["House", "Apartment", "Villa", "Office", "Commercial Building", "Land"],
   },
   rooms: {
     type: String,
@@ -64,6 +65,7 @@ const propertiesSchema = mongoose.Schema({
   price: {
     type: Number,
   },
+
 });
 
 propertiesSchema.index({ location: "2dsphere" });

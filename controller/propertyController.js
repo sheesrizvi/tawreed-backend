@@ -13,6 +13,7 @@ const config = {
 const s3 = new S3Client(config);
 
 const createProperty = asyncHandler(async (req, res) => {
+
   const {
     name,
     description,
@@ -33,6 +34,7 @@ const createProperty = asyncHandler(async (req, res) => {
     area
   } = req.body;
 
+  if(!area) return res.status(400).send({ message: 'Area is Required'})
   const property = Properties.create({
     name,
     description,
@@ -80,7 +82,7 @@ const updateProperty = asyncHandler(async (req, res) => {
   } = req.body;
 
   const property = await Properties.findById(id);
-
+ 
   if (property) {
     property.name = name;
     property.description = description;
