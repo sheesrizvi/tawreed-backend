@@ -11,10 +11,9 @@ const upload = require("./routes/upload");
 const userRoutes = require("./routes/userRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes")
 const misc = require("./routes/miscRoutes");
-//const send = require("./routes/send");
+const send = require("./routes/send");
 const rnPushTokens = require("./routes/rnPushTokens");
 const cors = require("cors");
-
 const app = express();
 const source = process.env.MONGO_URI;
 app.use(
@@ -35,7 +34,7 @@ app.use("/api/directory", directoryRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/misc", misc);
 
-//app.use("/api/send", send);
+app.use("/api/send", send);
 app.use("/api/rnPushTokens", rnPushTokens);
 
 mongoose
