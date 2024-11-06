@@ -23,7 +23,6 @@ const propertiesSchema = mongoose.Schema({
   area: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Area",
-    required: true
   },
   image: [
     {

@@ -34,7 +34,7 @@ const createProperty = asyncHandler(async (req, res) => {
     area
   } = req.body;
 
-  if(!area) return res.status(400).send({ message: 'Area is Required'})
+  
   const property = Properties.create({
     name,
     description,
