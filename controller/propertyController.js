@@ -33,7 +33,7 @@ const createProperty = asyncHandler(async (req, res) => {
     propertyManager,
     area
   } = req.body;
-
+ 
   
   const property = Properties.create({
     name,
@@ -82,14 +82,14 @@ const updateProperty = asyncHandler(async (req, res) => {
   } = req.body;
 
   const property = await Properties.findById(id);
- 
+
   if (property) {
     property.name = name;
     property.description = description;
     property.nameAr = nameAr;
     property.area = area;
     property.descriptionAr = descriptionAr;
-    property.image = image ? image : property.image;
+    property.image = Array.isArray(image) && image.length > 0 ? image : property.image;
     property.status = status;
     property.type = type;
     property.details = details;
