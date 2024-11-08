@@ -72,12 +72,14 @@ const updateProperty = asyncHandler(async (req, res) => {
     descriptionAr,
     detailsAr,
     image,
-    location,
     details,
     price,
+    rooms,
+    bathroom,
     area,
     type,
     status,
+    propertyManager,
     id
   } = req.body;
 
@@ -85,6 +87,9 @@ const updateProperty = asyncHandler(async (req, res) => {
 
   if (property) {
     property.name = name;
+    property.rooms = rooms;
+    property.bathroom = bathroom;
+    property.propertyManager = propertyManager;
     property.description = description;
     property.nameAr = nameAr;
     property.area = area;
@@ -95,10 +100,10 @@ const updateProperty = asyncHandler(async (req, res) => {
     property.details = details;
     property.detailsAr = detailsAr;
     property.price = price;
-    property.location = location ? {
-      type: "Point",
-      coordinates: [location.longitude, location.latitude],
-    } : property.location;
+    // property.location = location ? {
+    //   type: "Point",
+    //   coordinates: [location.longitude, location.latitude],
+    // } : property.location;
 
     const updatedProperty = await property.save();
 
